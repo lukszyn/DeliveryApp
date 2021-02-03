@@ -1,13 +1,15 @@
 ﻿using DeliveryApp.DataLayer.Models;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeliveryApp.BusinessLayer.Interfaces
 {
     public interface IUsersService
     {
-        public bool FindByEmail(string email);
+        public bool CheckIfUserExists(string email);
+        public bool CheckIfValidCourier(int id);
+        public User FindUserByEmail(string email);
+        public int GetUserId(string email);
+        public ICollection<User> GetAllDrivers();
         public void Add(User user);
     }
 }

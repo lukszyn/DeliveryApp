@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace DeliveryApp.DataLayer.Models
@@ -24,8 +25,11 @@ namespace DeliveryApp.DataLayer.Models
     {
         public int Id { get; set; }
         public Guid Number { get; set; }
-        public User Receiver { get; set; }
+        [ForeignKey("User")]
+        public int SenderId { get; set; }
         public User Sender { get; set; }
+        public string Receiver { get; set; }
+        public Address ReceiverAddress { get; set; }
         public DateTime RegisterDate { get; set; }
         public Size Size { get; set; }
         public Status Status { get; set; }

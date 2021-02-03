@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
+    <PackageReference Include="Moq" Version="4.16.0" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
@@ -15,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DeliveryApp.BusinessLayer\DeliveryApp.BusinessLayer.csproj" />
     <ProjectReference Include="..\DeliveryApp.DataLayer\DeliveryApp.DataLayer.csproj" />
-    <ProjectReference Include="..\FirmaKurierska\DeliveryApp.csproj" />
+    <ProjectReference Include="..\DeliveryApp\DeliveryApp.csproj" />
   </ItemGroup>
 
 </Project>

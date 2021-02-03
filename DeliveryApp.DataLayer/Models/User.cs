@@ -8,8 +8,8 @@ namespace DeliveryApp.DataLayer.Models
 {
     public enum UserType
     {
-        Customer,
-        Driver
+        Customer = 1,
+        Driver = 2
     }
 
     public class User
@@ -27,10 +27,7 @@ namespace DeliveryApp.DataLayer.Models
         public Address Address { get; set;}
         public UserType UserType { get; set; }
 
-        [InverseProperty("Sender")]
-        public ICollection<Package> SentPackages { get; set; }
-
-        [InverseProperty("Receiver")]
-        public ICollection<Package> ReceivedPackages { get; set; }
+        public ICollection<Package> Packages { get; set; }
+        public Vehicle Vehicle { get; set; }
     }
 }

@@ -13,9 +13,8 @@ namespace DeliveryApp.DataLayer.Models
         public string City { get; set; }
 
         [RegularExpression(@"\d{2}-\d{3}")]
-        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; }
     }
 }

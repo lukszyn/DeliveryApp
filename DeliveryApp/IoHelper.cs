@@ -4,8 +4,33 @@ using System.Text;
 
 namespace DeliveryApp
 {
+    public enum MessageType
+    {
+        ERROR,
+        SUCCESS
+    }
+
     public class IoHelper
     {
+        public void DisplayInfo(string message, MessageType color)
+        {
+            Console.Clear();
+
+            if (color == MessageType.ERROR)
+            {
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.WriteLine(message);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine(message);
+                Console.ResetColor();
+            }
+        }
+
         public string GetTextFromUser(string message)
         {
             Console.Write($"{message}: ");
@@ -67,5 +92,6 @@ namespace DeliveryApp
         {
             return amount <= 0;
         }
+
     }
 }

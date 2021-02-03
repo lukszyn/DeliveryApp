@@ -10,7 +10,9 @@ namespace DeliveryApp.DataLayer.Models
         public string Make { get; set; }
         public string Model { get; set; }
         public string Plate { get; set; }
-        public int Capacity { get; set; }
-        public User Driver { get; set; }
+        public uint Capacity { get; set; }
+        public uint Occupancy { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
     }
 }
