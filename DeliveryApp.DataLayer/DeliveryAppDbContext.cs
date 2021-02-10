@@ -25,5 +25,6 @@ namespace DeliveryApp.DataLayer
         {
             optionsBuilder.UseSqlServer(@"Server=.;Database=DeliveryAppDB;Trusted_Connection=True");
         }
+
     }
 }

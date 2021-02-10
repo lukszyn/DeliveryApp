@@ -31,13 +31,13 @@ namespace DeliveryApp.BusinessLayer.Services
         {
             using (var context = new DeliveryAppDbContext())
             {
-                var vehicle = context.Vehicles.Find(id);
+                var vehicle = context.Vehicles.FirstOrDefault(v => v.Id == id);
 
-                if (vehicle is null)
+                if (vehicle == null)
                 {
                     return false;
                 }
-                vehicle.Occupancy += size;
+                vehicle.Load += size;
 
                 context.SaveChanges();
 

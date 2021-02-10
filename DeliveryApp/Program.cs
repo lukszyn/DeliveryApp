@@ -9,25 +9,37 @@ namespace DeliveryApp
 {
     class Program
     {
-        private Menu _menu = new Menu();
-        private IoHelper _ioHelper = new IoHelper();
-        private DbService _dbService = new DbService();
-        private TimerService _timer = new TimerService();
-        private WaybillsService _waybillsService;
+        private readonly IMenu _menu;
+        private readonly IIoHelper _ioHelper;
+        private readonly IDbService _dbService;
+        private readonly ITimeProvider _timer;
+        private readonly IWaybillsService _waybillsService;
         private readonly IUsersService _usersService;
         private readonly IPackagesService _packagesService;
         private readonly IVehiclesService _vehiclesService;
+        private readonly IDeliveriesService _deliveriesService;
 
         public Program(IGeographicDataService geoDataService,
+                       IMenu menu,
+                       IIoHelper ioHelper,
+                       IDbService dbService,
+                       ITimeProvider timer,
+                       IWaybillsService waybillsService,
                        IUsersService usersService,
                        IPackagesService packagesService,
-                       IVehiclesService vehiclesService)
+                       IVehiclesService vehiclesService,
+                       IDeliveriesService deliveriesService)
         {
             _usersService = usersService;
             _packagesService = packagesService;
             _waybillsService = new WaybillsService(packagesService, usersService,
                 vehiclesService, new JsonSerializer());
             _vehiclesService = vehiclesService;
+            _deliveriesService = deliveriesService;
+            _menu = menu;
+            _ioHelper = ioHelper;
+            _dbService = dbService;
+            _timer = timer;
         }
 
         static void Main()
@@ -42,8 +54,24 @@ namespace DeliveryApp
         void Run()
         {
             _dbService.EnsureDatabaseCreation();
-            _waybillsService.MatchPackages();
-            _timer.SetTimer(_waybillsService.MatchPackages, 1000 * 60 * 24);
+
+            _timer.SetTimer(_waybillsService.MatchPackages,
+                new DateTime(TimeProvider.Now.Year,
+                TimeProvider.Now.Month,
+                TimeProvider.Now.Day, 0, 0, 0, 0)
+                .AddDays(1));
+
+            _timer.SetTimer(_deliveriesService.StartDelivering,
+                new DateTime(TimeProvider.Now.Year,
+                TimeProvider.Now.Month,
+                TimeProvider.Now.Day, 8, 0, 0, 0)
+                .AddDays(1));
+
+            _timer.SetTimer(_deliveriesService.FinishDelivering,
+                new DateTime(TimeProvider.Now.Year,
+                TimeProvider.Now.Month,
+                TimeProvider.Now.Day, 18, 0, 0, 0)
+                .AddDays(1));
 
             Console.WriteLine("Welcome to the BankApp.\n");
             
@@ -129,9 +157,9 @@ namespace DeliveryApp
                     City = _ioHelper.GetTextFromUser("Enter city name"),
                     ZipCode = _ioHelper.GetTextFromUser("Enter zip code"),
                 },
-                RegisterDate = AcceleratedDateTime.Now,
+                RegisterDate = TimeProvider.Now,
                 Size = (Size)Convert.ToInt32(_ioHelper.GetIntFromUser("Enter package weight")),
-                Status = Status.PENDING_SENDING
+                Status = Status.PendingSending
             };
 
             _packagesService.Add(package);

@@ -11,5 +11,6 @@ namespace DeliveryApp.BusinessLayer.Interfaces
         public int GetUserId(string email);
         public ICollection<User> GetAllDrivers();
         public void Add(User user);
+        public bool UpdatePackages(int userId, Package package);
     }
 }

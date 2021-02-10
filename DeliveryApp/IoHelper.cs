@@ -10,7 +10,20 @@ namespace DeliveryApp
         SUCCESS
     }
 
-    public class IoHelper
+    public interface IIoHelper
+    {
+        bool CheckIfNegative(decimal amount);
+        void DisplayInfo(string message, MessageType color);
+        decimal GetDecimalFromUser(string message);
+        int GetIntFromUser(string message);
+        string GetTextFromUser(string message);
+        uint GetUintFromUser(string message);
+        bool ValidateEmail(string email);
+        bool ValidatePassword(string password);
+        bool ValidatePhoneNumber(string phoneNumber);
+    }
+
+    public class IoHelper : IIoHelper
     {
         public void DisplayInfo(string message, MessageType color)
         {
@@ -84,8 +97,7 @@ namespace DeliveryApp
 
         public bool ValidatePhoneNumber(string phoneNumber)
         {
-            int number;
-            return phoneNumber.Length == 9 && int.TryParse(phoneNumber, out number);
+            return phoneNumber.Length == 9 && int.TryParse(phoneNumber, out _);
         }
 
         public bool CheckIfNegative(decimal amount)

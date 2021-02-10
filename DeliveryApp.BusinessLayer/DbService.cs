@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DeliveryApp.BusinessLayer
 {
-    public class DbService
+    public class DbService : IDbService
     {
         public void EnsureDatabaseCreation()
         {

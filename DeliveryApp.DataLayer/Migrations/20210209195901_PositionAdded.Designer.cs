@@ -4,14 +4,16 @@ using DeliveryApp.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DeliveryApp.DataLayer.Migrations
 {
     [DbContext(typeof(DeliveryAppDbContext))]
-    partial class DeliveryAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210209195901_PositionAdded")]
+    partial class PositionAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

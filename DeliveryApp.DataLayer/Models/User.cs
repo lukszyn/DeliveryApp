@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GeoCoordinatePortable;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,6 +26,7 @@ namespace DeliveryApp.DataLayer.Models
         [EmailAddress]
         public string Email { get; set; }
         public Address Address { get; set;}
+        public Position Position { get; set; }
         public UserType UserType { get; set; }
 
         public ICollection<Package> Packages { get; set; }

@@ -30,28 +30,31 @@ namespace DeliveryApp.BusinessLayer.Services
         {
             var packages = _packagesService.GetAllPackagesToBeSend();
 
-            if (packages is null) return;
+            if (!packages.Any())
+            {
+                return;
+            }
 
             var drivers = _usersService.GetAllDrivers().ToList();
 
             foreach (var package in packages)
             {
-                //dla kazdej paczki szukam kuriera ktory bedzie musial pokonac najmniejsza odleglosc
                 var closestDriver = ChooseDriver(package, drivers);
-                //po dobraniu kuriera zmieniam status paczki i dodaje ja do paczek kuriera, zmieniam tez oblozenie
-                //samochodu kuriera
+
                 if (closestDriver != null)
                 {
-                    _packagesService.UpdateStatus(package.Id, Status.SENT);
-
-                    _vehiclesService.UpdateOccupancy(closestDriver.Vehicle.Id, (uint)package.Size);
+                    _packagesService.UpdateStatus(package.Id,
+                                                  closestDriver.Vehicle.Id,
+                                                  Status.Sent,
+                                                  (uint)package.Size);
 
                     closestDriver.Packages.Add(package);
+
+                    _usersService.UpdatePackages(closestDriver.Id, package);
                 }
             }
-            //generuje listy przewozowe dla kazdego kuriera na dany dzien
-            GenerateWaybills(drivers);
 
+            GenerateWaybills(drivers);
         }
 
         private void GenerateWaybills(List<User> drivers)
@@ -65,7 +68,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
-                var fileName = $"{path}\\{driver.Id}_{AcceleratedDateTime.Now.ToShortDateString()}.json";
+                var fileName = $"{path}\\{driver.Id}_{TimeProvider.Now.ToShortDateString()}.json";
                 _serializer.Serialize(fileName, driver);
             }
         }
@@ -75,23 +78,29 @@ namespace DeliveryApp.BusinessLayer.Services
             User closestDriver = null;
             double closestDist = double.MaxValue;
 
-            var senderLocation = GetLocation(package.Sender.Address); //pozycja nadawcy
-            var receiverLocation = GetLocation(package.ReceiverAddress); //pozycja odbiorcy paczki
+            var senderLocation = GetLocation(package.Sender.Address);
+            var receiverLocation = GetLocation(package.ReceiverAddress);
 
-            var distanceSendToRec = senderLocation.GetDistanceTo(receiverLocation); //odleglosc miedzy nimi
+            var distanceSendToRec = senderLocation.GetDistanceTo(receiverLocation);
 
             foreach (var driver in drivers)
             {
-                //szukam kuriera ktory bedzie musial pokonac najmniejsza odleglosc miedzy swoim punktem poczatkowym,
-                //nadawca, odbiorca i z powrotem swoim punktem
-                var driverLocation = GetLocation(driver.Address);
+                var driverLocation = new GeoCoordinate(driver.Position.Latitude, driver.Position.Longitude);
                 var dist = driverLocation.GetDistanceTo(senderLocation)
                          + distanceSendToRec + driverLocation.GetDistanceTo(receiverLocation);
 
-                //sprawdzam dodatkowo czy w samochodzie kuriera jest miejsce na paczke
                 if (dist < closestDist &&
-                    (driver.Vehicle.Occupancy + (uint)package.Size < driver.Vehicle.Capacity))
+                    (driver.Vehicle.Load + (uint)package.Size < driver.Vehicle.Capacity))
                 {
+                    var deliveryTime = CalculateDeliveryTime(driver);
+                    var newPackageDeliveryTime = EstimateDriveTime(driver.Vehicle.AverageSpeed,
+                        driver.Position, package.Sender.Position, package.ReceiverPosition);
+
+                    if (deliveryTime + newPackageDeliveryTime > 10.0d)
+                    {
+                        continue;
+                    }
+
                     closestDriver = driver;
                     closestDist = dist;
                 }
@@ -110,5 +119,35 @@ namespace DeliveryApp.BusinessLayer.Services
 
             return new GeoCoordinate(data.Lat, data.Lon);
         }
+
+        public double CalculateDeliveryTime(User driver)
+        {
+            var packages = driver.Packages;
+            var position = driver.Position;
+            var workTime = 0.0d;
+
+            foreach (var pckg in packages)
+            {
+                workTime += EstimateDriveTime(driver.Vehicle.AverageSpeed, position, pckg.Sender.Position, 
+                    pckg.ReceiverPosition);
+                position = pckg.ReceiverPosition;
+            }
+
+            driver.Position = position;
+            return workTime;
+        }
+
+        public double EstimateDriveTime(double avgSpeed, Position current, Position next, Position final)
+        {
+            var start = new GeoCoordinate(current.Latitude, current.Longitude);
+            var middle = new GeoCoordinate(next.Latitude, next.Longitude);
+            var end = new GeoCoordinate(final.Latitude, final.Longitude);
+
+            var dist = (start.GetDistanceTo(middle) + middle.GetDistanceTo(end)) / 1000;
+
+            return dist / avgSpeed;
+        }
     }
+
+
 }

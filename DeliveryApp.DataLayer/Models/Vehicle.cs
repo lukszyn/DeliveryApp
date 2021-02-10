@@ -11,7 +11,8 @@ namespace DeliveryApp.DataLayer.Models
         public string Model { get; set; }
         public string Plate { get; set; }
         public uint Capacity { get; set; }
-        public uint Occupancy { get; set; }
+        public uint Load { get; set; }
+        public int AverageSpeed { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
     }

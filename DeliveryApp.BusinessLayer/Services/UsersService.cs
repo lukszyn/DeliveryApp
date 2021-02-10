@@ -45,7 +45,7 @@ namespace DeliveryApp.BusinessLayer.Services
             {
                 var user = context.Users.FirstOrDefault(user => user.Email == email);
 
-                return user is null ? 0 : user.Id;
+                return user?.Id ?? 0;
             }
         }
 
@@ -67,6 +67,25 @@ namespace DeliveryApp.BusinessLayer.Services
                     .Include(u => u.Address)
                     .Include(u => u.Packages)
                     .Where(u => u.UserType == UserType.Driver).ToList();
+            }
+        }
+
+        public bool UpdatePackages(int userId, Package package)
+        {
+            using (var context = new DeliveryAppDbContext())
+            {
+                var courier = context.Users.FirstOrDefault(c => c.Id == userId);
+
+                if (courier == null)
+                {
+                    return false;
+                }
+
+                courier.Packages.Add(package);
+
+                context.SaveChanges();
+
+                return true;
             }
         }
     }

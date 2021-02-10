@@ -68,7 +68,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 0
+                    Load = 0
                 }
             };
 
@@ -87,7 +87,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 0
+                    Load = 0
                 }
             };
 
@@ -101,8 +101,8 @@ namespace DeliveryApp.Tests
                     Number = 60,
                     City = "Gdañsk"
                 },
-                Size = Size.SMALL,
-                Status = Status.PENDING_SENDING
+                Size = Size.Small,
+                Status = Status.PendingSending
             };
 
             var pckgService = new Mock<IPackagesService>();
@@ -154,7 +154,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 95
+                    Load = 95
                 }
             };
 
@@ -173,7 +173,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 0
+                    Load = 0
                 }
             };
 
@@ -187,8 +187,8 @@ namespace DeliveryApp.Tests
                     Number = 60,
                     City = "Gdañsk"
                 },
-                Size = Size.SMALL,
-                Status = Status.PENDING_SENDING
+                Size = Size.Small,
+                Status = Status.PendingSending
             };
 
             var pckgService = new Mock<IPackagesService>();
@@ -254,7 +254,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 0
+                    Load = 0
                 },
                 Packages = new List<Package>()
             };
@@ -274,7 +274,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 0
+                    Load = 0
                 },
                 Packages = new List<Package>()
             };
@@ -289,8 +289,8 @@ namespace DeliveryApp.Tests
                     Number = 60,
                     City = "Gdañsk"
                 },
-                Size = Size.SMALL,
-                Status = Status.PENDING_SENDING
+                Size = Size.Small,
+                Status = Status.PendingSending
             };
 
             Package package2 = new Package()
@@ -303,8 +303,8 @@ namespace DeliveryApp.Tests
                     Number = 13,
                     City = "Olsztyn"
                 },
-                Size = Size.MEDIUM,
-                Status = Status.PENDING_SENDING
+                Size = Size.Medium,
+                Status = Status.PendingSending
             };
 
             var pckgService = new Mock<IPackagesService>();
@@ -380,7 +380,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 95
+                    Load = 95
                 },
                 Packages = new List<Package>()
             };
@@ -400,7 +400,7 @@ namespace DeliveryApp.Tests
                 Vehicle = new Vehicle()
                 {
                     Capacity = 100,
-                    Occupancy = 95
+                    Load = 95
                 },
                 Packages = new List<Package>()
             };
@@ -415,8 +415,8 @@ namespace DeliveryApp.Tests
                     Number = 60,
                     City = "Gdañsk"
                 },
-                Size = Size.SMALL,
-                Status = Status.PENDING_SENDING
+                Size = Size.Small,
+                Status = Status.PendingSending
             };
 
             Package package2 = new Package()
@@ -429,8 +429,8 @@ namespace DeliveryApp.Tests
                     Number = 13,
                     City = "Olsztyn"
                 },
-                Size = Size.MEDIUM,
-                Status = Status.PENDING_SENDING
+                Size = Size.Medium,
+                Status = Status.PendingSending
             };
 
             var pckgService = new Mock<IPackagesService>();
@@ -456,8 +456,8 @@ namespace DeliveryApp.Tests
 
             wbService.MatchPackages();
 
-            package1.Status.Should().Be(Status.PENDING_SENDING);
-            package2.Status.Should().Be(Status.PENDING_SENDING);
+            package1.Status.Should().Be(Status.PendingSending);
+            package2.Status.Should().Be(Status.PendingSending);
         }
     }
 }
