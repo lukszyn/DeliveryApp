@@ -57,6 +57,9 @@ namespace DeliveryApp.DataLayer.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<int?>("CourierId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("Number")
                         .HasColumnType("uniqueidentifier");
 
@@ -82,6 +85,8 @@ namespace DeliveryApp.DataLayer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourierId");
 
                     b.HasIndex("ReceiverAddressId");
 
@@ -186,6 +191,10 @@ namespace DeliveryApp.DataLayer.Migrations
 
             modelBuilder.Entity("DeliveryApp.DataLayer.Models.Package", b =>
                 {
+                    b.HasOne("DeliveryApp.DataLayer.Models.User", "Courier")
+                        .WithMany("Packages")
+                        .HasForeignKey("CourierId");
+
                     b.HasOne("DeliveryApp.DataLayer.Models.Address", "ReceiverAddress")
                         .WithMany()
                         .HasForeignKey("ReceiverAddressId");
@@ -195,10 +204,12 @@ namespace DeliveryApp.DataLayer.Migrations
                         .HasForeignKey("ReceiverPositionId");
 
                     b.HasOne("DeliveryApp.DataLayer.Models.User", "Sender")
-                        .WithMany("Packages")
+                        .WithMany("SentPackages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Courier");
 
                     b.Navigation("ReceiverAddress");
 
@@ -232,6 +243,8 @@ namespace DeliveryApp.DataLayer.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("Packages");
+
+                    b.Navigation("SentPackages");
 
                     b.Navigation("Vehicle");
                 });

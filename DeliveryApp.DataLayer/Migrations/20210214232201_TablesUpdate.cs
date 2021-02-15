@@ -2,7 +2,7 @@
 
 namespace DeliveryApp.DataLayer.Migrations
 {
-    public partial class PositionAdded : Migration
+    public partial class TablesUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,11 +16,17 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Vehicles",
                 type: "int",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 70);
 
             migrationBuilder.AddColumn<int>(
                 name: "PositionId",
                 table: "Users",
+                type: "int",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CourierId",
+                table: "Packages",
                 type: "int",
                 nullable: true);
 
@@ -50,6 +56,11 @@ namespace DeliveryApp.DataLayer.Migrations
                 column: "PositionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Packages_CourierId",
+                table: "Packages",
+                column: "CourierId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Packages_ReceiverPositionId",
                 table: "Packages",
                 column: "ReceiverPositionId");
@@ -59,6 +70,14 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Packages",
                 column: "ReceiverPositionId",
                 principalTable: "Position",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Packages_Users_CourierId",
+                table: "Packages",
+                column: "CourierId",
+                principalTable: "Users",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
 
@@ -78,6 +97,10 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Packages");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_Packages_Users_CourierId",
+                table: "Packages");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Users_Position_PositionId",
                 table: "Users");
 
@@ -87,6 +110,10 @@ namespace DeliveryApp.DataLayer.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Users_PositionId",
                 table: "Users");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Packages_CourierId",
+                table: "Packages");
 
             migrationBuilder.DropIndex(
                 name: "IX_Packages_ReceiverPositionId",
@@ -99,6 +126,10 @@ namespace DeliveryApp.DataLayer.Migrations
             migrationBuilder.DropColumn(
                 name: "PositionId",
                 table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "CourierId",
+                table: "Packages");
 
             migrationBuilder.DropColumn(
                 name: "ReceiverPositionId",

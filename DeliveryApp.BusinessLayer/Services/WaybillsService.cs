@@ -17,13 +17,13 @@ namespace DeliveryApp.BusinessLayer.Services
         private readonly ISerializer _serializer;
 
         public WaybillsService(IPackagesService packagesService, IUsersService usersService, IVehiclesService vehiclesService,
-                                ISerializer serializer)
+                                ISerializer serializer, IGeographicDataService geoDataService)
         {
             _packagesService = packagesService;
             _usersService = usersService;
             _vehiclesService = vehiclesService;
             _serializer = serializer;
-            _geoDataService = new GeographicDataService();
+            _geoDataService = geoDataService;
         }
 
         public void MatchPackages()
@@ -36,6 +36,7 @@ namespace DeliveryApp.BusinessLayer.Services
             }
 
             var drivers = _usersService.GetAllDrivers().ToList();
+            _packagesService.ClearDriversPackagesList(drivers);
 
             foreach (var package in packages)
             {
@@ -44,7 +45,7 @@ namespace DeliveryApp.BusinessLayer.Services
                 if (closestDriver != null)
                 {
                     _packagesService.UpdateStatus(package.Id,
-                                                  closestDriver.Vehicle.Id,
+                                                  closestDriver.Id,
                                                   Status.Sent,
                                                   (uint)package.Size);
 
@@ -77,9 +78,10 @@ namespace DeliveryApp.BusinessLayer.Services
         {
             User closestDriver = null;
             double closestDist = double.MaxValue;
+            double workingHours = 10.0d;
 
-            var senderLocation = GetLocation(package.Sender.Address);
-            var receiverLocation = GetLocation(package.ReceiverAddress);
+            var senderLocation = new GeoCoordinate(package.Sender.Position.Latitude, package.Sender.Position.Longitude);
+            var receiverLocation = new GeoCoordinate(package.ReceiverPosition.Latitude, package.ReceiverPosition.Longitude);
 
             var distanceSendToRec = senderLocation.GetDistanceTo(receiverLocation);
 
@@ -96,7 +98,7 @@ namespace DeliveryApp.BusinessLayer.Services
                     var newPackageDeliveryTime = EstimateDriveTime(driver.Vehicle.AverageSpeed,
                         driver.Position, package.Sender.Position, package.ReceiverPosition);
 
-                    if (deliveryTime + newPackageDeliveryTime > 10.0d)
+                    if (deliveryTime + newPackageDeliveryTime > workingHours)
                     {
                         continue;
                     }
@@ -122,7 +124,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public double CalculateDeliveryTime(User driver)
         {
-            var packages = driver.Packages;
+            var packages = _usersService.GetDriverPackages(driver.Id);
             var position = driver.Position;
             var workTime = 0.0d;
 

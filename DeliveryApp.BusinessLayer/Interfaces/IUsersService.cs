@@ -12,5 +12,7 @@ namespace DeliveryApp.BusinessLayer.Interfaces
         public ICollection<User> GetAllDrivers();
         public void Add(User user);
         public bool UpdatePackages(int userId, Package package);
+        Position GetUserPosition(Address address);
+        List<Package> GetDriverPackages(int driverId);
     }
 }

@@ -26,9 +26,10 @@ namespace DeliveryApp.Tests
             var vhService = new Mock<IVehiclesService>();
             var usrService = new Mock<IUsersService>();
             var serializer = new Mock<ISerializer>();
+            var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object);
+                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
 
             var coordinates = wbService.GetLocation(address);
 
@@ -109,9 +110,10 @@ namespace DeliveryApp.Tests
             var vhService = new Mock<IVehiclesService>();
             var usrService = new Mock<IUsersService>();
             var serializer = new Mock<ISerializer>();
+            var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object);
+                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -195,9 +197,10 @@ namespace DeliveryApp.Tests
             var vhService = new Mock<IVehiclesService>();
             var usrService = new Mock<IUsersService>();
             var serializer = new Mock<ISerializer>();
+            var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object);
+                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -311,6 +314,7 @@ namespace DeliveryApp.Tests
             var vhService = new Mock<IVehiclesService>();
             var usrService = new Mock<IUsersService>();
             var serializer = new Mock<ISerializer>();
+            var geoService = new Mock<IGeographicDataService>();
 
             pckgService.Setup(s => s.GetAllPackagesToBeSend())
                 .Returns(new List<Package>
@@ -325,8 +329,9 @@ namespace DeliveryApp.Tests
                     driver2,
                 });
 
+
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object);
+                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 
@@ -437,6 +442,7 @@ namespace DeliveryApp.Tests
             var vhService = new Mock<IVehiclesService>();
             var usrService = new Mock<IUsersService>();
             var serializer = new Mock<ISerializer>();
+            var geoService = new Mock<IGeographicDataService>();
 
             pckgService.Setup(s => s.GetAllPackagesToBeSend())
                 .Returns(new List<Package>
@@ -452,7 +458,7 @@ namespace DeliveryApp.Tests
                 });
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object);
+                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 

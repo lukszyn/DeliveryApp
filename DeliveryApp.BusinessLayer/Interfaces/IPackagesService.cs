@@ -7,7 +7,7 @@ namespace DeliveryApp.BusinessLayer.Interfaces
     {
         public void Add(Package package);
         public ICollection<Package> GetAllPackagesToBeSend();
-        public bool UpdateStatus(int packageId, int vehicleId, Status status, uint size = 0);
+        public bool UpdateStatus(int packageId, int driverId, Status status, uint size = 0);
         public void ClearDriversPackagesList(ICollection<User> drivers);
     }
 }

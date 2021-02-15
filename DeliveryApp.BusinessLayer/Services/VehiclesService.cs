@@ -27,7 +27,7 @@ namespace DeliveryApp.BusinessLayer.Services
             }
         }
 
-        public bool UpdateOccupancy(int id, uint size)
+        public bool UpdateLoad(int id, uint size)
         {
             using (var context = new DeliveryAppDbContext())
             {

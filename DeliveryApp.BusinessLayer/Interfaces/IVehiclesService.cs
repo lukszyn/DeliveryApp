@@ -6,6 +6,6 @@ namespace DeliveryApp.BusinessLayer.Interfaces
     {
         public bool FindByPlate(string plate);
         public void Add(Vehicle vehicle);
-        public bool UpdateOccupancy(int id, uint size);
+        public bool UpdateLoad(int id, uint size);
     }
 }

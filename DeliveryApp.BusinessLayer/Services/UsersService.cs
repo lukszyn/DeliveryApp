@@ -11,6 +11,14 @@ namespace DeliveryApp.BusinessLayer.Services
 {
     public class UsersService : IUsersService
     {
+        private readonly IGeographicDataService _geoDataService;
+
+        public UsersService(IGeographicDataService geoDataService)
+        {
+            _geoDataService = geoDataService;
+        }
+
+
         public bool CheckIfUserExists(string email)
         {
             using (var context = new DeliveryAppDbContext())
@@ -66,6 +74,7 @@ namespace DeliveryApp.BusinessLayer.Services
                     .Include(u => u.Vehicle)
                     .Include(u => u.Address)
                     .Include(u => u.Packages)
+                    .Include(u => u.Position)
                     .Where(u => u.UserType == UserType.Driver).ToList();
             }
         }
@@ -81,11 +90,41 @@ namespace DeliveryApp.BusinessLayer.Services
                     return false;
                 }
 
+                if (courier.Packages == null)
+                {
+                    courier.Packages = new List<Package>();
+                }
+
                 courier.Packages.Add(package);
 
                 context.SaveChanges();
 
                 return true;
+            }
+        }
+
+        public Position GetUserPosition(Address address)
+        {
+            var userGeoPosition = _geoDataService.GetCoordinatesForAddress("Poland",
+                address.City, address.Street, address.Number.ToString())[0];
+
+            return new Position()
+            {
+                Longitude = userGeoPosition.Lon,
+                Latitude = userGeoPosition.Lat,
+            };
+        }
+
+        public List<Package> GetDriverPackages(int driverId)
+        {
+            using (var context = new DeliveryAppDbContext())
+            {
+                var driver = context.Users.Include(u => u.Packages).ThenInclude(p => p.ReceiverAddress)
+                    .Include(u => u.Packages).ThenInclude(p => p.Sender).ThenInclude(s => s.Position)
+                    .Include(u => u.Packages).ThenInclude(p => p.ReceiverPosition)
+                    .FirstOrDefault(u => u.Id == driverId);
+
+                return driver.Packages.ToList();
             }
         }
     }

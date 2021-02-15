@@ -15,6 +15,7 @@ namespace DeliveryApp.BusinessLayer.Serializers
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
+
             File.WriteAllText(filePath, jsonData);
         }
     }

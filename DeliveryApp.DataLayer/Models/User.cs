@@ -28,7 +28,9 @@ namespace DeliveryApp.DataLayer.Models
         public Address Address { get; set;}
         public Position Position { get; set; }
         public UserType UserType { get; set; }
-
+        [InverseProperty("Sender")]
+        public ICollection<Package> SentPackages { get; set; }
+        [InverseProperty("Courier")]
         public ICollection<Package> Packages { get; set; }
         public Vehicle Vehicle { get; set; }
     }

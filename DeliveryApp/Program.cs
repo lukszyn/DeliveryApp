@@ -1,9 +1,10 @@
 ﻿using System;
 using DeliveryApp.BusinessLayer;
 using DeliveryApp.BusinessLayer.Interfaces;
+using DeliveryApp.BusinessLayer.Models;
 using DeliveryApp.BusinessLayer.Services;
 using DeliveryApp.DataLayer.Models;
-using DeliveryApp.BusinessLayer.Serializers;
+using Unity;
 
 namespace DeliveryApp
 {
@@ -12,62 +13,61 @@ namespace DeliveryApp
         private readonly IMenu _menu;
         private readonly IIoHelper _ioHelper;
         private readonly IDbService _dbService;
-        private readonly ITimeProvider _timer;
+        private readonly ITimersService _timersService;
         private readonly IWaybillsService _waybillsService;
         private readonly IUsersService _usersService;
         private readonly IPackagesService _packagesService;
         private readonly IVehiclesService _vehiclesService;
         private readonly IDeliveriesService _deliveriesService;
+        private readonly IGeographicDataService _geoDataService;
 
         public Program(IGeographicDataService geoDataService,
                        IMenu menu,
                        IIoHelper ioHelper,
                        IDbService dbService,
-                       ITimeProvider timer,
+                       ITimersService timersService,
                        IWaybillsService waybillsService,
                        IUsersService usersService,
                        IPackagesService packagesService,
                        IVehiclesService vehiclesService,
                        IDeliveriesService deliveriesService)
         {
+            _geoDataService = geoDataService;
             _usersService = usersService;
             _packagesService = packagesService;
-            _waybillsService = new WaybillsService(packagesService, usersService,
-                vehiclesService, new JsonSerializer());
+            _waybillsService = waybillsService;
             _vehiclesService = vehiclesService;
             _deliveriesService = deliveriesService;
             _menu = menu;
             _ioHelper = ioHelper;
             _dbService = dbService;
-            _timer = timer;
+            _timersService = timersService;
         }
 
         static void Main()
         {
-            new Program(new GeographicDataService(),
-                new UsersService(),
-                new PackagesService(),
-                new VehiclesService())
-                .Run();
+            var container = new DiContainerProvider().GetContainer();
+
+            container.Resolve<Program>().Run();
         }
 
         void Run()
         {
             _dbService.EnsureDatabaseCreation();
 
-            _timer.SetTimer(_waybillsService.MatchPackages,
+            new TimersService().SetTimer(_waybillsService.MatchPackages,
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 0, 0, 0, 0)
                 .AddDays(1));
 
-            _timer.SetTimer(_deliveriesService.StartDelivering,
+            new TimersService().SetTimer(_deliveriesService.StartDelivering,
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 8, 0, 0, 0)
                 .AddDays(1));
 
-            _timer.SetTimer(_deliveriesService.FinishDelivering,
+            new TimersService().SetTimer(_deliveriesService.FinishDelivering,
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 18, 0, 0, 0)
@@ -81,7 +81,7 @@ namespace DeliveryApp
             do
             {
                 userChoice = GetUserOption(_menu);
-
+                Console.WriteLine();
                 _menu.ExecuteOption(userChoice);
 
                 if (userChoice == 0) return;
@@ -90,7 +90,7 @@ namespace DeliveryApp
 
         }
 
-        private int GetUserOption(Menu menu)
+        private int GetUserOption(IMenu menu)
         {
             menu.PrintAvailableOptions();
             Console.WriteLine("Press 0 to exit.");
@@ -162,6 +162,8 @@ namespace DeliveryApp
                 Status = Status.PendingSending
             };
 
+            package.ReceiverPosition = _usersService.GetUserPosition(package.ReceiverAddress);
+
             _packagesService.Add(package);
 
             _ioHelper.DisplayInfo("Package sent successfully!\n", MessageType.SUCCESS);
@@ -200,6 +202,8 @@ namespace DeliveryApp
                 UserType = (UserType)Convert
                     .ToInt32(_ioHelper.GetIntFromUser("Enter user type (1 - customer, 2 - courier)"))
             };
+
+            user.Position = _usersService.GetUserPosition(user.Address);
 
             _usersService.Add(user);
 

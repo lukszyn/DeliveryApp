@@ -25,23 +25,32 @@ namespace DeliveryApp.BusinessLayer.Services
                 return context.Packages
                     .Include(p => p.Sender)
                     .ThenInclude(s => s.Address)
+                    .Include(p => p.Sender)
+                    .ThenInclude(s => s.Position)
                     .Include(p => p.ReceiverAddress)
+                    .Include(p => p.ReceiverPosition)
                     .Where(p => p.Status == Status.PendingSending).ToList();
             }
         }
 
-        public bool UpdateStatus(int packageId, int vehicleId, Status status, uint size = 0)
+        public bool UpdateStatus(int packageId, int driverId, Status status, uint size = 0)
         {
             using (var context = new DeliveryAppDbContext())
             {
                 var package = context.Packages.FirstOrDefault(p => p.Id == packageId);
-                var vehicle = context.Vehicles.FirstOrDefault(v => v.Id == vehicleId);
+                var driver = context.Users.Include(u => u.Vehicle).FirstOrDefault(u => u.Id == driverId);
+                var vehicle = context.Vehicles.FirstOrDefault(v => v.Id == driver.Vehicle.Id);
 
                 if (package == null || vehicle == null)
                 {
                     return false;
                 }
 
+                if (package.Courier == null)
+                {
+                    package.Courier = driver;
+                }
+                
                 package.Status = status;
                 vehicle.Load += size;
 
@@ -58,8 +67,14 @@ namespace DeliveryApp.BusinessLayer.Services
                 foreach (var driver in drivers)
                 {
                     var dr = context.Users.FirstOrDefault(d => d.Id == driver.Id);
-                    dr.Packages.Clear();
-                    
+
+                    if (dr.Packages == null)
+                    {
+                        return;
+                    }
+
+                    dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+
                 }
                 context.SaveChanges();
             }

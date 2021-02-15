@@ -8,19 +8,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp", "DeliveryApp.
 		{33196CCB-629C-4430-A4C2-12365E0473E2} = {33196CCB-629C-4430-A4C2-12365E0473E2}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.BusinessLayer", "..\DeliveryApp.BusinessLayer\DeliveryApp.BusinessLayer.csproj", "{33196CCB-629C-4430-A4C2-12365E0473E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.BusinessLayer", "..\DeliveryApp.BusinessLayer\DeliveryApp.BusinessLayer.csproj", "{33196CCB-629C-4430-A4C2-12365E0473E2}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E3EDAF41-905A-4658-B3BF-D8C59FD79935} = {E3EDAF41-905A-4658-B3BF-D8C59FD79935}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.DataLayer", "..\DeliveryApp.DataLayer\DeliveryApp.DataLayer.csproj", "{E3EDAF41-905A-4658-B3BF-D8C59FD79935}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.DataLayer", "..\DeliveryApp.DataLayer\DeliveryApp.DataLayer.csproj", "{E3EDAF41-905A-4658-B3BF-D8C59FD79935}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.Tests", "..\DeliveryApp.Tests\DeliveryApp.Tests.csproj", "{DB062685-05C7-4210-8DC6-70870FCB67DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Tests", "..\DeliveryApp.Tests\DeliveryApp.Tests.csproj", "{DB062685-05C7-4210-8DC6-70870FCB67DC}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E3EDAF41-905A-4658-B3BF-D8C59FD79935} = {E3EDAF41-905A-4658-B3BF-D8C59FD79935}
 		{33196CCB-629C-4430-A4C2-12365E0473E2} = {33196CCB-629C-4430-A4C2-12365E0473E2}
 		{3E9E50FB-934C-4D12-84DB-CCF62BE76486} = {3E9E50FB-934C-4D12-84DB-CCF62BE76486}
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfirmationSender", "..\ConfirmationSender\ConfirmationSender.csproj", "{B4431F72-A954-4359-8FB1-50E70783AB65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
