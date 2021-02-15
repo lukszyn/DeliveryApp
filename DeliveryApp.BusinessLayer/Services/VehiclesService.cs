@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -37,7 +34,7 @@ namespace DeliveryApp.BusinessLayer.Services
                 {
                     return false;
                 }
-                vehicle.Load += size;
+                vehicle.Load = size;
 
                 context.SaveChanges();
 

@@ -4,8 +4,6 @@ using DeliveryApp.BusinessLayer.Serializers;
 using DeliveryApp.BusinessLayer.Services;
 using DeliveryApp.DataLayer;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Unity;
 using Unity.Injection;
 
@@ -28,6 +26,7 @@ namespace DeliveryApp
             container.RegisterType<IDbService, DbService>();
             container.RegisterType<IDeliveriesService, DeliveriesService>();
             container.RegisterType<ITimersService, TimersService>();
+            container.RegisterType<IConfirmationRequestsService, ConfirmationRequestsService>();
 
             container.RegisterType<ISerializer, JsonSerializer>();
 

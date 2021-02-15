@@ -8,6 +8,7 @@ namespace DeliveryApp.BusinessLayer.Services
         private Timer _timer;
         private Action _timeElapsed;
         private DateTime _timerStart;
+        private const double TimeMultiplier = 60.0d;
 
         public void SetTimer(Action action, DateTime start)
         {
@@ -18,22 +19,21 @@ namespace DeliveryApp.BusinessLayer.Services
                 start = start.AddDays(1);
             }
 
-            double tickTime = (double)(start - nowTime).TotalSeconds / 60.0d;
-            _timer = new Timer(tickTime * 1000);
+            double tickTime = (double)(start - nowTime).TotalMilliseconds / TimeMultiplier;
+            _timer = new Timer(tickTime);
 
             _timeElapsed = action;
             _timerStart = start;
-            _timer.Elapsed += OnTimedEvent;
-            //_timer.AutoReset = true;
+
+            _timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            _timer.AutoReset = true;
             _timer.Start();
-            //_timer.Enabled = true;
         }
 
         public void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
             _timeElapsed?.Invoke();
-            _timer.Stop();
-            SetTimer(_timeElapsed, TimeProvider.Now);
+            _timer.Interval = (_timerStart.AddDays(1) - _timerStart).TotalMilliseconds / TimeMultiplier;
         }
     }
 }

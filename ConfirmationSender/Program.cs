@@ -2,6 +2,7 @@
 using EventStore.Client;
 using Newtonsoft.Json;
 using System;
+using System.Net.Mail;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +39,35 @@ namespace ConfirmationSender
 
             var packageData = JsonConvert.DeserializeObject<PackageData>(jsonData);
 
-            Console.WriteLine(jsonData);
+            SendEmail(packageData);
+        }
+
+        private static void SendEmail(PackageData packageData)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient SmtpServer = new SmtpClient("127.0.0.1");
+
+                mail.From = new MailAddress("notifications@mail.com");
+                mail.To.Add(packageData.Email);
+                mail.Subject = "Delivery Confirmation";
+
+                mail.Body = $"Your package has been delivered\n\n" +
+                    $"{packageData.Id}\n" +
+                    $"{packageData.Receiver}\n" +
+                    $"{packageData.Street} {packageData.Number}\n" +
+                    $"{packageData.ZipCode} {packageData.City}\n" +
+                    $"Sender email: {packageData.Email}";
+
+                SmtpServer.Port = 2500;
+
+                SmtpServer.Send(mail);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Sending a delivery confirmation email failed.");
+            }
         }
     }
 }

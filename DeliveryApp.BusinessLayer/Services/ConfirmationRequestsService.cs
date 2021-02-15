@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace DeliveryApp.BusinessLayer.Services
 {
-    public class ConfirmationRequestsService
+    public class ConfirmationRequestsService : IConfirmationRequestsService
     {
         public void SendRequest(PackageData packageData)
         {

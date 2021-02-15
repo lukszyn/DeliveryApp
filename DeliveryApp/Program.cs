@@ -1,7 +1,6 @@
 ﻿using System;
 using DeliveryApp.BusinessLayer;
 using DeliveryApp.BusinessLayer.Interfaces;
-using DeliveryApp.BusinessLayer.Models;
 using DeliveryApp.BusinessLayer.Services;
 using DeliveryApp.DataLayer.Models;
 using Unity;
@@ -13,26 +12,22 @@ namespace DeliveryApp
         private readonly IMenu _menu;
         private readonly IIoHelper _ioHelper;
         private readonly IDbService _dbService;
-        private readonly ITimersService _timersService;
         private readonly IWaybillsService _waybillsService;
         private readonly IUsersService _usersService;
         private readonly IPackagesService _packagesService;
         private readonly IVehiclesService _vehiclesService;
         private readonly IDeliveriesService _deliveriesService;
-        private readonly IGeographicDataService _geoDataService;
 
         public Program(IGeographicDataService geoDataService,
                        IMenu menu,
                        IIoHelper ioHelper,
                        IDbService dbService,
-                       ITimersService timersService,
                        IWaybillsService waybillsService,
                        IUsersService usersService,
                        IPackagesService packagesService,
                        IVehiclesService vehiclesService,
                        IDeliveriesService deliveriesService)
         {
-            _geoDataService = geoDataService;
             _usersService = usersService;
             _packagesService = packagesService;
             _waybillsService = waybillsService;
@@ -41,7 +36,6 @@ namespace DeliveryApp
             _menu = menu;
             _ioHelper = ioHelper;
             _dbService = dbService;
-            _timersService = timersService;
         }
 
         static void Main()
@@ -59,19 +53,19 @@ namespace DeliveryApp
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 0, 0, 0, 0)
-                .AddDays(1));
+                );
 
             new TimersService().SetTimer(_deliveriesService.StartDelivering,
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 8, 0, 0, 0)
-                .AddDays(1));
+                );
 
             new TimersService().SetTimer(_deliveriesService.FinishDelivering,
                 new DateTime(TimeProvider.Now.Year,
                 TimeProvider.Now.Month,
                 TimeProvider.Now.Day, 18, 0, 0, 0)
-                .AddDays(1));
+                );
 
             Console.WriteLine("Welcome to the BankApp.\n");
             

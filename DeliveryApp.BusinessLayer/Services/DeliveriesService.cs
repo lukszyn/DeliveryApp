@@ -1,8 +1,6 @@
 ﻿using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.BusinessLayer.Models;
 using DeliveryApp.DataLayer.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace DeliveryApp.BusinessLayer.Services
 {
@@ -57,6 +55,7 @@ namespace DeliveryApp.BusinessLayer.Services
                     if (status == Status.Delivered)
                     {
                         _vehiclesService.UpdateLoad(driver.Vehicle.Id, 0);
+
                         new ConfirmationRequestsService().SendRequest(new PackageData() {
                             Id = package.Number,
                             Receiver = package.Receiver,
