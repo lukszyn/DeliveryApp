@@ -13,15 +13,13 @@ namespace DeliveryApp.BusinessLayer.Services
         private readonly IPackagesService _packagesService;
         private readonly IUsersService _usersService;
         private readonly IGeographicDataService _geoDataService;
-        private readonly IVehiclesService _vehiclesService;
         private readonly ISerializer _serializer;
 
-        public WaybillsService(IPackagesService packagesService, IUsersService usersService, IVehiclesService vehiclesService,
-                                ISerializer serializer, IGeographicDataService geoDataService)
+        public WaybillsService(IPackagesService packagesService, IUsersService usersService,
+            ISerializer serializer, IGeographicDataService geoDataService)
         {
             _packagesService = packagesService;
             _usersService = usersService;
-            _vehiclesService = vehiclesService;
             _serializer = serializer;
             _geoDataService = geoDataService;
         }

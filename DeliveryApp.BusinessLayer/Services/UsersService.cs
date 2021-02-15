@@ -12,16 +12,18 @@ namespace DeliveryApp.BusinessLayer.Services
     public class UsersService : IUsersService
     {
         private readonly IGeographicDataService _geoDataService;
+        private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
 
-        public UsersService(IGeographicDataService geoDataService)
+        public UsersService(IGeographicDataService geoDataService, Func<IDeliveryAppDbContext> dbContextFactoryMethod)
         {
             _geoDataService = geoDataService;
+            _dbContextFactoryMethod = dbContextFactoryMethod;
         }
 
 
         public bool CheckIfUserExists(string email)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Users.Any(user => user.Email == email);
             }
@@ -29,7 +31,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public bool CheckIfValidCourier(int id)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Users
                     .Include(u => u.Vehicle)
@@ -41,7 +43,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public User FindUserByEmail(string email)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Users.FirstOrDefault(user => user.Email == email);
             }
@@ -49,7 +51,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public int GetUserId(string email)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 var user = context.Users.FirstOrDefault(user => user.Email == email);
 
@@ -59,7 +61,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public void Add(User user)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 context.Users.Add(user);
                 context.SaveChanges();
@@ -68,7 +70,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public ICollection<User> GetAllDrivers()
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Users
                     .Include(u => u.Vehicle)
@@ -81,7 +83,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public bool UpdatePackages(int userId, Package package)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 var courier = context.Users.FirstOrDefault(c => c.Id == userId);
 
@@ -117,7 +119,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public List<Package> GetDriverPackages(int driverId)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 var driver = context.Users.Include(u => u.Packages).ThenInclude(p => p.ReceiverAddress)
                     .Include(u => u.Packages).ThenInclude(p => p.Sender).ThenInclude(s => s.Position)

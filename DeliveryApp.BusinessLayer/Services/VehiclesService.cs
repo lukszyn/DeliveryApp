@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -7,9 +8,16 @@ namespace DeliveryApp.BusinessLayer.Services
 {
     public class VehiclesService : IVehiclesService
     {
+        private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
+
+        public VehiclesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod)
+        {
+            _dbContextFactoryMethod = dbContextFactoryMethod;
+        }
+
         public bool FindByPlate(string plate)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Vehicles.Any(v => v.Plate == plate);
             }
@@ -17,7 +25,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public void Add(Vehicle vehicle)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 context.Vehicles.Add(vehicle);
                 context.SaveChanges();
@@ -26,7 +34,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public bool UpdateLoad(int id, uint size)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 var vehicle = context.Vehicles.FirstOrDefault(v => v.Id == id);
 

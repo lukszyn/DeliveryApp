@@ -1,5 +1,6 @@
 ﻿using DeliveryApp.DataLayer.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace DeliveryApp.DataLayer
         public DbSet<User> Users { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        DatabaseFacade Database { get; }
         int SaveChanges();
     }
     public class DeliveryAppDbContext : DbContext, IDeliveryAppDbContext

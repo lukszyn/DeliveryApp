@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
@@ -9,9 +10,16 @@ namespace DeliveryApp.BusinessLayer.Services
 {
     public class PackagesService : IPackagesService
     {
+        private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
+
+        public PackagesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod)
+        {
+            _dbContextFactoryMethod = dbContextFactoryMethod;
+        }
+
         public void Add(Package package)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 context.Packages.Add(package);
                 context.SaveChanges();
@@ -20,7 +28,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public ICollection<Package> GetAllPackagesToBeSend()
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 return context.Packages
                     .Include(p => p.Sender)
@@ -35,7 +43,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public bool UpdateStatus(int packageId, int driverId, Status status, uint size = 0)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 var package = context.Packages.FirstOrDefault(p => p.Id == packageId);
                 var driver = context.Users.Include(u => u.Vehicle).FirstOrDefault(u => u.Id == driverId);
@@ -62,7 +70,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public void ClearDriversPackagesList(ICollection<User> drivers)
         {
-            using (var context = new DeliveryAppDbContext())
+            using (var context = _dbContextFactoryMethod())
             {
                 foreach (var driver in drivers)
                 {
