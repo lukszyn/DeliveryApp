@@ -4,8 +4,8 @@ namespace DeliveryApp
 {
     public enum MessageType
     {
-        ERROR,
-        SUCCESS
+        Error,
+        Success
     }
 
     public interface IIoHelper
@@ -27,7 +27,7 @@ namespace DeliveryApp
         {
             Console.Clear();
 
-            if (color == MessageType.ERROR)
+            if (color == MessageType.Error)
             {
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.WriteLine(message);

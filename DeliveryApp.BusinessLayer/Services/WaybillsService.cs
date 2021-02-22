@@ -67,7 +67,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
-                var fileName = $"{path}\\{driver.Id}_{TimeProvider.Now.ToShortDateString()}.json";
+                var fileName = Path.Combine(path, "\\", driver.Id.ToString(), "-", TimeProvider.Now.ToShortDateString(), ".json");
                 _serializer.Serialize(fileName, driver);
             }
         }
@@ -115,7 +115,7 @@ namespace DeliveryApp.BusinessLayer.Services
             var street = address.Street;
             var building = address.Number.ToString();
 
-            var data = _geoDataService.GetCoordinatesForAddress(country, city, street, building)[0];
+            var data = _geoDataService.GetCoordinatesForAddress(country, city, street, building);
 
             return new GeoCoordinate(data.Lat, data.Lon);
         }

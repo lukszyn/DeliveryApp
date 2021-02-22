@@ -12,7 +12,7 @@ namespace DeliveryApp.BusinessLayer.Services
     public class UsersService : IUsersService
     {
         private readonly IGeographicDataService _geoDataService;
-        private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
+        private readonly Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
 
         public UsersService(IGeographicDataService geoDataService, Func<IDeliveryAppDbContext> dbContextFactoryMethod)
         {
@@ -108,7 +108,7 @@ namespace DeliveryApp.BusinessLayer.Services
         public Position GetUserPosition(Address address)
         {
             var userGeoPosition = _geoDataService.GetCoordinatesForAddress("Poland",
-                address.City, address.Street, address.Number.ToString())[0];
+                address.City, address.Street, address.Number.ToString());
 
             return new Position()
             {
@@ -121,9 +121,14 @@ namespace DeliveryApp.BusinessLayer.Services
         {
             using (var context = _dbContextFactoryMethod())
             {
-                var driver = context.Users.Include(u => u.Packages).ThenInclude(p => p.ReceiverAddress)
-                    .Include(u => u.Packages).ThenInclude(p => p.Sender).ThenInclude(s => s.Position)
-                    .Include(u => u.Packages).ThenInclude(p => p.ReceiverPosition)
+                var driver = context.Users
+                    .Include(u => u.Packages)
+                    .ThenInclude(p => p.ReceiverAddress)
+                    .Include(u => u.Packages)
+                    .ThenInclude(p => p.Sender)
+                    .ThenInclude(s => s.Position)
+                    .Include(u => u.Packages)
+                    .ThenInclude(p => p.ReceiverPosition)
                     .FirstOrDefault(u => u.Id == driverId);
 
                 return driver.Packages.ToList();

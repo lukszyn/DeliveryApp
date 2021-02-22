@@ -105,7 +105,7 @@ namespace DeliveryApp
 
             if (_vehiclesService.FindByPlate(plate))
             {
-                _ioHelper.DisplayInfo("Vehicle with given plates number already exists!\n", MessageType.ERROR);
+                _ioHelper.DisplayInfo("Vehicle with given plates number already exists!\n", MessageType.Error);
                 return;
             }
 
@@ -125,7 +125,7 @@ namespace DeliveryApp
 
             _vehiclesService.Add(vehicle);
 
-            _ioHelper.DisplayInfo("Vehicle added successfully!\n", MessageType.SUCCESS);
+            _ioHelper.DisplayInfo("Vehicle added successfully!\n", MessageType.Success);
         }
 
         private void AddPackage()
@@ -134,7 +134,7 @@ namespace DeliveryApp
 
             if (userId == 0)
             {
-                _ioHelper.DisplayInfo("User with given email does not exist!\n", MessageType.ERROR);
+                _ioHelper.DisplayInfo("User with given email does not exist!\n", MessageType.Error);
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace DeliveryApp
 
             _packagesService.Add(package);
 
-            _ioHelper.DisplayInfo("Package sent successfully!\n", MessageType.SUCCESS);
+            _ioHelper.DisplayInfo("Package sent successfully!\n", MessageType.Success);
 
         }
 
@@ -171,13 +171,13 @@ namespace DeliveryApp
 
             if (!_ioHelper.ValidateEmail(email))
             {
-                _ioHelper.DisplayInfo("Email must contain \'@\' character!\n", MessageType.ERROR);
+                _ioHelper.DisplayInfo("Email must contain \'@\' character!\n", MessageType.Error);
                 return;
             }
 
             if (_usersService.CheckIfUserExists(email))
             {
-                _ioHelper.DisplayInfo("User with given email already exists!\n", MessageType.ERROR);
+                _ioHelper.DisplayInfo("User with given email already exists!\n", MessageType.Error);
                 return;
             }
 
@@ -201,7 +201,7 @@ namespace DeliveryApp
 
             _usersService.Add(user);
 
-            _ioHelper.DisplayInfo("User added successfully!\n", MessageType.SUCCESS);
+            _ioHelper.DisplayInfo("User added successfully!\n", MessageType.Success);
         }
     }
 }

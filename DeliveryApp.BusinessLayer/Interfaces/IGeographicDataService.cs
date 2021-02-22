@@ -6,6 +6,6 @@ namespace DeliveryApp.BusinessLayer.Interfaces
     public interface IGeographicDataService
     {
         public GeoResponse GetAddressForCoordinates(double latitude, double longitude);
-        public List<GeoResponse> GetCoordinatesForAddress(string country, string city, string street, string building);
+        public GeoResponse GetCoordinatesForAddress(string country, string city, string street, string building);
     }
 }

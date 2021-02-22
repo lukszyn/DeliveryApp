@@ -41,7 +41,7 @@ namespace DeliveryApp.BusinessLayer.Services
             }
         }
 
-        public bool UpdateStatus(int packageId, int driverId, Status status, uint size = 0)
+        public bool UpdateStatus(int packageId, int driverId, Status status, uint loadToAdd = 0)
         {
             using (var context = _dbContextFactoryMethod())
             {
@@ -60,7 +60,7 @@ namespace DeliveryApp.BusinessLayer.Services
                 }
                 
                 package.Status = status;
-                vehicle.Load += size;
+                vehicle.Load += loadToAdd;
 
                 context.SaveChanges();
 
@@ -74,11 +74,13 @@ namespace DeliveryApp.BusinessLayer.Services
             {
                 foreach (var driver in drivers)
                 {
-                    var dr = context.Users.FirstOrDefault(d => d.Id == driver.Id);
+                    var dr = context.Users
+                        .Include(u => u.Packages)
+                        .FirstOrDefault(d => d.Id == driver.Id);
 
                     if (dr.Packages == null)
                     {
-                        return;
+                        continue;
                     }
 
                     dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);

@@ -32,8 +32,6 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public void FinishDelivering()
         {
-            var drivers = _usersService.GetAllDrivers();
-
             DeliverPackages(Status.Delivered);
         }
 
