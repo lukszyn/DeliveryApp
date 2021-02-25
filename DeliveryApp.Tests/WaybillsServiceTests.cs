@@ -29,7 +29,7 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             var coordinates = wbService.GetLocation(address);
 
@@ -113,7 +113,7 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -200,7 +200,7 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -331,7 +331,7 @@ namespace DeliveryApp.Tests
 
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 
@@ -458,7 +458,7 @@ namespace DeliveryApp.Tests
                 });
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 

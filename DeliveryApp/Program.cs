@@ -67,7 +67,7 @@ namespace DeliveryApp
                 TimeProvider.Now.Day, 18, 0, 0, 0)
                 );
 
-            Console.WriteLine("Welcome to the BankApp.\n");
+            Console.WriteLine("Welcome to the DeliveryApp.\n");
             
             int userChoice;
             RegisterMenuOptions();
@@ -115,6 +115,7 @@ namespace DeliveryApp
                 Model = _ioHelper.GetTextFromUser("Enter vehicle\'s model"),
                 Plate = plate,
                 Capacity = _ioHelper.GetUintFromUser("Enter vehicle\'s capacity [kg]"),
+                AverageSpeed = _ioHelper.GetIntFromUser("Enter vehicle\'s average speed [km/h]"),
             };
 
             do

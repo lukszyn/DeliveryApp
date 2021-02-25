@@ -84,6 +84,7 @@ namespace DeliveryApp.BusinessLayer.Services
                     }
 
                     dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+                    context.Users.Update(driver);
 
                 }
                 context.SaveChanges();
