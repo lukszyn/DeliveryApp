@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace DeliveryApp.DataLayer
 {
@@ -14,6 +16,7 @@ namespace DeliveryApp.DataLayer
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Address> Addresses { get; set; }
         DatabaseFacade Database { get; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
         int SaveChanges();
     }
     public class DeliveryAppDbContext : DbContext, IDeliveryAppDbContext
@@ -27,6 +30,5 @@ namespace DeliveryApp.DataLayer
         {
             optionsBuilder.UseSqlServer(@"Server=.;Database=DeliveryAppDB;Trusted_Connection=True");
         }
-
     }
 }

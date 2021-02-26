@@ -16,7 +16,7 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Vehicles",
                 type: "int",
                 nullable: false,
-                defaultValue: 70);
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
                 name: "PositionId",

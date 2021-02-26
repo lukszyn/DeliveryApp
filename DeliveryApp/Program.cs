@@ -124,7 +124,7 @@ namespace DeliveryApp
 
             } while (!_usersService.CheckIfValidCourier(vehicle.UserId) || vehicle.UserId == 0);
 
-            _vehiclesService.Add(vehicle);
+            _vehiclesService.AddAsync(vehicle).Wait();
 
             _ioHelper.DisplayInfo("Vehicle added successfully!\n", MessageType.Success);
         }
@@ -141,7 +141,6 @@ namespace DeliveryApp
 
             Package package = new Package()
             {
-                Number = Guid.NewGuid(),
                 SenderId = userId,
                 Receiver = _ioHelper.GetTextFromUser("Enter receiver\'s first name") + " "
                               + _ioHelper.GetTextFromUser("Enter receiver\'s last name"),
@@ -152,14 +151,11 @@ namespace DeliveryApp
                     City = _ioHelper.GetTextFromUser("Enter city name"),
                     ZipCode = _ioHelper.GetTextFromUser("Enter zip code"),
                 },
-                RegisterDate = TimeProvider.Now,
                 Size = (Size)Convert.ToInt32(_ioHelper.GetIntFromUser("Enter package weight")),
                 Status = Status.PendingSending
             };
 
-            package.ReceiverPosition = _usersService.GetUserPosition(package.ReceiverAddress);
-
-            _packagesService.Add(package);
+            _packagesService.AddAsync(package).Wait();
 
             _ioHelper.DisplayInfo("Package sent successfully!\n", MessageType.Success);
 
@@ -198,9 +194,7 @@ namespace DeliveryApp
                     .ToInt32(_ioHelper.GetIntFromUser("Enter user type (1 - customer, 2 - courier)"))
             };
 
-            user.Position = _usersService.GetUserPosition(user.Address);
-
-            _usersService.Add(user);
+            _usersService.AddAsync(user).Wait();
 
             _ioHelper.DisplayInfo("User added successfully!\n", MessageType.Success);
         }

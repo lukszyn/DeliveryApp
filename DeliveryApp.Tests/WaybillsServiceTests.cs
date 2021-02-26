@@ -31,7 +31,7 @@ namespace DeliveryApp.Tests
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
                 usrService.Object, serializer.Object, geoService.Object);
 
-            var coordinates = wbService.GetLocation(address);
+            var coordinates = wbService.GetLocation(address).Result;
 
             coordinates.Latitude.Should().BeApproximately(54.3754, 0.001);
             coordinates.Longitude.Should().BeApproximately(18.6159, 0.001);

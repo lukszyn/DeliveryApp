@@ -19,8 +19,4 @@
     <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
 </Project>

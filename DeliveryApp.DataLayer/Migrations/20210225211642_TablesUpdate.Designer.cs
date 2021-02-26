@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.DataLayer.Migrations
 {
     [DbContext(typeof(DeliveryAppDbContext))]
-    [Migration("20210214232201_TablesUpdate")]
+    [Migration("20210225211642_TablesUpdate")]
     partial class TablesUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

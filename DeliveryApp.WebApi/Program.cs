@@ -1,35 +1,34 @@
-﻿using Unity.Microsoft.DependencyInjection;
-using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Hosting;
+using Topshelf;
+using Unity;
+using System;
 
 namespace DeliveryApp.WebApi
 {
     public class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             var container = new UnityDiContainerProvider().GetContainer();
+            var appHost = container.Resolve<AppHost>();
 
-            WebHost
-                .CreateDefaultBuilder()
-                .UseUnityServiceProvider(container)
-                .ConfigureServices(services =>
+            var rc = HostFactory.Run(x =>
+            {
+                x.Service<AppHost>(s =>
                 {
-                    services.AddMvc();
-                })
-                .Configure(app => {
-                    app.UseRouting();
-                    app.UseEndpoints(endpoints =>
-                    {
-                        endpoints.MapControllers();
-                    });
-                    app.UseCors();
-                })
-                .UseUrls("http://*:10500")
-                .Build()
-                .Run();
+                    s.ConstructUsing(sf => appHost);
+                    s.WhenStarted(ah => ah.Start());
+                    s.WhenStopped(ah => ah.Stop());
+                });
+
+                x.RunAsLocalSystem();
+                x.SetDescription("DeliveryApp WebAPI Service");
+                x.SetDisplayName("DeliveryAppAPI.Service");
+                x.SetServiceName("DeliveryAppAPI.Service");
+            });
+
+            var exitCode = (int)Convert.ChangeType(rc, rc.GetTypeCode());
+            Environment.ExitCode = exitCode;
         }
     }
 }
