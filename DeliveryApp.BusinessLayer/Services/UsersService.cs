@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -20,6 +21,15 @@ namespace DeliveryApp.BusinessLayer.Services
             _dbContextFactoryMethod = dbContextFactoryMethod;
         }
 
+        public async Task<User> ValidateCourier(string email, string password)
+        {
+            using (var context = _dbContextFactoryMethod())
+            {
+                return await context.Users.AsQueryable().FirstOrDefaultAsync(user => user.Email == email
+                                         && user.Password == password
+                                         && user.UserType == UserType.Driver);
+            }
+        }
 
         public bool CheckIfUserExists(string email)
         {
@@ -59,12 +69,13 @@ namespace DeliveryApp.BusinessLayer.Services
             }
         }
 
-        public void Add(User user)
+        public async Task AddAsync(User user)
         {
             using (var context = _dbContextFactoryMethod())
             {
+                user.Position = await GetUserPosition(user.Address);
                 context.Users.Add(user);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -77,7 +88,8 @@ namespace DeliveryApp.BusinessLayer.Services
                     .Include(u => u.Address)
                     .Include(u => u.Packages)
                     .Include(u => u.Position)
-                    .Where(u => u.UserType == UserType.Driver).ToList();
+                    .Where(u => u.UserType == UserType.Driver)
+                    .ToList();
             }
         }
 
@@ -105,9 +117,9 @@ namespace DeliveryApp.BusinessLayer.Services
             }
         }
 
-        public Position GetUserPosition(Address address)
+        public async Task<Position> GetUserPosition(Address address)
         {
-            var userGeoPosition = _geoDataService.GetCoordinatesForAddress("Poland",
+            var userGeoPosition = await _geoDataService.GetCoordinatesForAddress("Poland",
                 address.City, address.Street, address.Number.ToString());
 
             return new Position()

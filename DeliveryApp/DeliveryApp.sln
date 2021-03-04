@@ -24,6 +24,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Tests", "..\Del
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfirmationSender", "..\ConfirmationSender\ConfirmationSender.csproj", "{B4431F72-A954-4359-8FB1-50E70783AB65}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.WebApi", "..\DeliveryApp.WebApi\DeliveryApp.WebApi.csproj", "{B02A8BC5-9533-4D8C-9553-0599CCBA4B58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeliveryApp.WebApi.Client", "..\DeliveryApp.Api.Client\DeliveryApp.WebApi.Client.csproj", "{7C73E5E5-969C-4FB3-B4D3-8FE06CF2096B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{B4431F72-A954-4359-8FB1-50E70783AB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B02A8BC5-9533-4D8C-9553-0599CCBA4B58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B02A8BC5-9533-4D8C-9553-0599CCBA4B58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B02A8BC5-9533-4D8C-9553-0599CCBA4B58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B02A8BC5-9533-4D8C-9553-0599CCBA4B58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C73E5E5-969C-4FB3-B4D3-8FE06CF2096B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C73E5E5-969C-4FB3-B4D3-8FE06CF2096B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C73E5E5-969C-4FB3-B4D3-8FE06CF2096B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C73E5E5-969C-4FB3-B4D3-8FE06CF2096B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DeliveryApp.BusinessLayer.Serializers
 {
@@ -17,6 +18,14 @@ namespace DeliveryApp.BusinessLayer.Serializers
             });
 
             File.WriteAllText(filePath, jsonData);
+        }
+
+        public async Task<User> DeserializeAsync(string filePath)
+        {
+            var jsonData = await File.ReadAllTextAsync(filePath);
+            var deserializedData = JsonConvert.DeserializeObject<User>(jsonData);
+
+            return deserializedData;
         }
     }
 }

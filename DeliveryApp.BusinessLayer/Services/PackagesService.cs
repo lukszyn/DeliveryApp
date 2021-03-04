@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -11,18 +12,25 @@ namespace DeliveryApp.BusinessLayer.Services
     public class PackagesService : IPackagesService
     {
         private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
+        private readonly IUsersService _usersService;
 
-        public PackagesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod)
+        public PackagesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod,
+            IUsersService usersService)
         {
             _dbContextFactoryMethod = dbContextFactoryMethod;
+            _usersService = usersService;
         }
 
-        public void Add(Package package)
+        public async Task AddAsync(Package package)
         {
             using (var context = _dbContextFactoryMethod())
             {
+                package.Number = Guid.NewGuid();
+                package.ReceiverPosition = await _usersService.GetUserPosition(package.ReceiverAddress);
+                package.RegisterDate = TimeProvider.Now;
+                
                 context.Packages.Add(package);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -84,6 +92,7 @@ namespace DeliveryApp.BusinessLayer.Services
                     }
 
                     dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+                    context.Users.Update(driver);
 
                 }
                 context.SaveChanges();

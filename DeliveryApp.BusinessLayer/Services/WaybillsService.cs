@@ -5,6 +5,7 @@ using GeoCoordinatePortable;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DeliveryApp.BusinessLayer.Services
 {
@@ -67,7 +68,13 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
-                var fileName = Path.Combine(path, "\\", driver.Id.ToString(), "-", TimeProvider.Now.ToShortDateString(), ".json");
+                var fileName = Path.Combine(path, "\\",
+                    driver.Id.ToString(), "_", 
+                    TimeProvider.Now.Year.ToString(),
+                    TimeProvider.Now.Month.ToString(),
+                    TimeProvider.Now.Day.ToString(),
+                    ".json");
+
                 _serializer.Serialize(fileName, driver);
             }
         }
@@ -108,14 +115,14 @@ namespace DeliveryApp.BusinessLayer.Services
             return closestDriver;
         }
 
-        public GeoCoordinate GetLocation(Address address)
+        public async Task<GeoCoordinate> GetLocation(Address address)
         {
             var country = "Poland";
             var city = address.City;
             var street = address.Street;
             var building = address.Number.ToString();
 
-            var data = _geoDataService.GetCoordinatesForAddress(country, city, street, building);
+            var data = await _geoDataService.GetCoordinatesForAddress(country, city, street, building);
 
             return new GeoCoordinate(data.Lat, data.Lon);
         }
@@ -147,7 +154,15 @@ namespace DeliveryApp.BusinessLayer.Services
 
             return dist / avgSpeed;
         }
+
+        public async Task<User> GetLatestWaybillAsync(int id)
+        {
+            var path = new DirectoryInfo(@"shipping_lists");
+            var file = path.GetFiles($"{id}*")
+                .OrderByDescending(f => f.LastWriteTime)
+                .First();
+
+            return await _serializer.DeserializeAsync(file.FullName);
+        }
     }
-
-
 }

@@ -1,5 +1,6 @@
 ﻿using DeliveryApp.DataLayer.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DeliveryApp.BusinessLayer.Interfaces
 {
@@ -10,9 +11,10 @@ namespace DeliveryApp.BusinessLayer.Interfaces
         public User FindUserByEmail(string email);
         public int GetUserId(string email);
         public ICollection<User> GetAllDrivers();
-        public void Add(User user);
+        public Task AddAsync(User user);
         public bool UpdatePackages(int userId, Package package);
-        Position GetUserPosition(Address address);
+        public Task<Position> GetUserPosition(Address address);
         List<Package> GetDriverPackages(int driverId);
+        Task<User> ValidateCourier(string email, string password);
     }
 }

@@ -29,9 +29,9 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
-            var coordinates = wbService.GetLocation(address);
+            var coordinates = wbService.GetLocation(address).Result;
 
             coordinates.Latitude.Should().BeApproximately(54.3754, 0.001);
             coordinates.Longitude.Should().BeApproximately(18.6159, 0.001);
@@ -113,7 +113,7 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -200,7 +200,7 @@ namespace DeliveryApp.Tests
             var geoService = new Mock<IGeographicDataService>();
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             var closestDriver = wbService.ChooseDriver(package, new List<User>
             {
@@ -331,7 +331,7 @@ namespace DeliveryApp.Tests
 
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 
@@ -458,7 +458,7 @@ namespace DeliveryApp.Tests
                 });
 
             IWaybillsService wbService = new WaybillsService(pckgService.Object,
-                usrService.Object, vhService.Object, serializer.Object, geoService.Object);
+                usrService.Object, serializer.Object, geoService.Object);
 
             wbService.MatchPackages();
 
