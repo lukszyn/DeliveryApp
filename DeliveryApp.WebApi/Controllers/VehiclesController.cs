@@ -15,7 +15,6 @@ namespace DeliveryApp.WebApi.Controllers
             _vehiclesService = vehiclesService;
         }
 
-
         /*
         Method: POST
         URI: http://localhost:10500/api/vehicles

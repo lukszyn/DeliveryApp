@@ -9,7 +9,7 @@ namespace DeliveryApp.Api.Client
 {
     class Program
     {
-        private string _loggedUserEmail;
+        private User _loggedUser;
 
         static void Main(string[] args)
         {
@@ -38,7 +38,7 @@ namespace DeliveryApp.Api.Client
                         Console.WriteLine("Unknown option");
                         break;
                 }
-            } while (_loggedUserEmail != null);
+            } while (_loggedUser != null);
 
             Console.WriteLine("Choose option:");
             Console.WriteLine("1. Show latest waybills");
@@ -51,7 +51,7 @@ namespace DeliveryApp.Api.Client
                 switch (userChoice)
                 {
                     case 1:
-                        ShowLatestWaybills();
+                        GetLatestWaybills(_loggedUser.Id);
                         break;
                     case 2:
                         Environment.Exit(0);
@@ -67,14 +67,13 @@ namespace DeliveryApp.Api.Client
         {
             var credentials = GetCredentials();
 
-            if (!CheckCredentials(credentials))
+            if (_loggedUser == null)
             {
                 Console.WriteLine("Invalid email or password.\n");
                 return;
             }
 
             Console.WriteLine($"\nWelcome to your account, {credentials.Email}\n");
-            _loggedUserEmail = credentials.Email;
         }
 
         private Credentials GetCredentials()
@@ -106,32 +105,36 @@ namespace DeliveryApp.Api.Client
             return number;
         }
 
-        public bool CheckCredentials(Credentials credentials)
+        public void CheckCredentials(Credentials credentials)
         {
             using (var httpClient = new HttpClient())
             {
                 var content = new StringContent(JsonConvert.SerializeObject(credentials), Encoding.UTF8, "application/json");
                 var response = httpClient.PostAsync(@$"http://localhost:10500/api/users/credentials", content).Result;
                 var responseText = response.Content.ReadAsStringAsync().Result;
+                var responseObject = JsonConvert.DeserializeObject<User>(responseText);
 
-                return response.IsSuccessStatusCode ? true : false;
+                if (response.IsSuccessStatusCode) 
+                {
+                    _loggedUser = responseObject;
+                }
             }
         }
 
-        private void ShowLatestWaybills()
+        private void GetLatestWaybills(int id)
         {
             using (var httpClient = new HttpClient())
             {
-                var response = httpClient.GetAsync(@$"http://localhost:10500/api/users").Result;
+                var response = httpClient.GetAsync(@$"http://localhost:10500/api/users/{id}").Result;
                 var responseText = response.Content.ReadAsStringAsync().Result;
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var reponseObject = JsonConvert.DeserializeObject<List<Dog>>(responseText);
-                    Console.WriteLine($"Success. Response content: ");
-                    foreach (var dog in reponseObject)
+                    var responseObject = JsonConvert.DeserializeObject<User>(responseText);
+
+                    foreach (var package in responseObject.Packages)
                     {
-                        PrintDog(dog);
+                        PrintPackage(package);
                     }
                 }
                 else
@@ -139,6 +142,18 @@ namespace DeliveryApp.Api.Client
                     Console.WriteLine($"Failed. Status code: {response.StatusCode}");
                 }
             }
+        }
+
+        private void PrintPackage(Package package)
+        {
+            var textToPrint = $"Package {package.Id}\n" +
+                $"Package number: {package.Number}\n" +
+                $"Receiver: {package.Receiver}\n" +
+                $" Receiver address: {package.ReceiverAddress.Street} {package.ReceiverAddress.Number}\n" +
+                $"{package.ReceiverAddress.ZipCode} {package.ReceiverAddress.City}\n" +
+                $"Sender: {package.Sender.FirstName} {package.Sender.LastName}";
+
+            Console.WriteLine(textToPrint);
         }
     }
 }

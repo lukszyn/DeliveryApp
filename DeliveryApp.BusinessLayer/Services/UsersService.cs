@@ -21,11 +21,11 @@ namespace DeliveryApp.BusinessLayer.Services
             _dbContextFactoryMethod = dbContextFactoryMethod;
         }
 
-        public async Task<bool> ValidateCourier(string email, string password)
+        public async Task<User> ValidateCourier(string email, string password)
         {
             using (var context = _dbContextFactoryMethod())
             {
-                return await context.Users.AsQueryable().AnyAsync(user => user.Email == email
+                return await context.Users.AsQueryable().FirstOrDefaultAsync(user => user.Email == email
                                          && user.Password == password
                                          && user.UserType == UserType.Driver);
             }

@@ -10,6 +10,7 @@ namespace DeliveryApp.BusinessLayer.Services
         double CalculateDeliveryTime(User driver);
         User ChooseDriver(Package package, List<User> drivers);
         public double EstimateDriveTime(double avgSpeed, Position current, Position next, Position final);
+        Task<User> GetLatestWaybillAsync(int id);
         public Task<GeoCoordinate> GetLocation(Address address);
         void MatchPackages();
     }

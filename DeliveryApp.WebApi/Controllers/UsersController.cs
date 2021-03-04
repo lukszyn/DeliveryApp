@@ -1,4 +1,5 @@
 ﻿using DeliveryApp.BusinessLayer.Interfaces;
+using DeliveryApp.BusinessLayer.Services;
 using DeliveryApp.DataLayer.Models;
 using DeliveryApp.WebApi.Client.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,12 @@ namespace DeliveryApp.WebApi.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService _usersService;
+        private readonly IWaybillsService _waybillsService;
 
-        public UsersController(IUsersService usersService)
+        public UsersController(IUsersService usersService, IWaybillsService waybillsService)
         {
             _usersService = usersService;
+            _waybillsService = waybillsService;
         }
 
         /*
@@ -54,9 +57,22 @@ namespace DeliveryApp.WebApi.Controllers
 
         [Route("credentials")]
         [HttpPost]
-        public async Task ValidateUser([FromBody] Credentials credentials)
+        public async Task<User> ValidateUser([FromBody] Credentials credentials)
         {
-            await _usersService.ValidateCourier(credentials.Email, credentials.Password);
+           return await _usersService.ValidateCourier(credentials.Email, credentials.Password);
+        }
+
+
+        /*
+        Method: GET
+            URI: http://localhost:10500/api/users/{id}
+        */
+
+        [Route("{id}")]
+        [HttpGet]
+        public async Task<User> GetUserPackages(int id)
+        {
+            return await _waybillsService.GetLatestWaybillAsync(id);
         }
     }
 }

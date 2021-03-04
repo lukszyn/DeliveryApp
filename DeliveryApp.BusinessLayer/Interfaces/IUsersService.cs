@@ -15,6 +15,6 @@ namespace DeliveryApp.BusinessLayer.Interfaces
         public bool UpdatePackages(int userId, Package package);
         public Task<Position> GetUserPosition(Address address);
         List<Package> GetDriverPackages(int driverId);
-        Task<bool> ValidateCourier(string email, string password);
+        Task<User> ValidateCourier(string email, string password);
     }
 }

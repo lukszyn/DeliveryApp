@@ -69,7 +69,7 @@ namespace DeliveryApp.BusinessLayer.Services
             foreach (var driver in drivers)
             {
                 var fileName = Path.Combine(path, "\\",
-                    driver.Id.ToString(), "-", 
+                    driver.Id.ToString(), "_", 
                     TimeProvider.Now.Year.ToString(),
                     TimeProvider.Now.Month.ToString(),
                     TimeProvider.Now.Day.ToString(),
@@ -154,7 +154,15 @@ namespace DeliveryApp.BusinessLayer.Services
 
             return dist / avgSpeed;
         }
+
+        public async Task<User> GetLatestWaybillAsync(int id)
+        {
+            var path = new DirectoryInfo(@"shipping_lists");
+            var file = path.GetFiles($"{id}*")
+                .OrderByDescending(f => f.LastWriteTime)
+                .First();
+
+            return await _serializer.DeserializeAsync(file.FullName);
+        }
     }
-
-
 }
