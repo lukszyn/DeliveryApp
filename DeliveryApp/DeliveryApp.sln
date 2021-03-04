@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp", "DeliveryApp.csproj", "{3E9E50FB-934C-4D12-84DB-CCF62BE76486}"
+	ProjectSection(ProjectDependencies) = postProject
+		{33196CCB-629C-4430-A4C2-12365E0473E2} = {33196CCB-629C-4430-A4C2-12365E0473E2}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.BusinessLayer", "..\DeliveryApp.BusinessLayer\DeliveryApp.BusinessLayer.csproj", "{33196CCB-629C-4430-A4C2-12365E0473E2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935} = {E3EDAF41-905A-4658-B3BF-D8C59FD79935}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.DataLayer", "..\DeliveryApp.DataLayer\DeliveryApp.DataLayer.csproj", "{E3EDAF41-905A-4658-B3BF-D8C59FD79935}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeliveryApp.Tests", "..\DeliveryApp.Tests\DeliveryApp.Tests.csproj", "{DB062685-05C7-4210-8DC6-70870FCB67DC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935} = {E3EDAF41-905A-4658-B3BF-D8C59FD79935}
+		{33196CCB-629C-4430-A4C2-12365E0473E2} = {33196CCB-629C-4430-A4C2-12365E0473E2}
+		{3E9E50FB-934C-4D12-84DB-CCF62BE76486} = {3E9E50FB-934C-4D12-84DB-CCF62BE76486}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConfirmationSender", "..\ConfirmationSender\ConfirmationSender.csproj", "{B4431F72-A954-4359-8FB1-50E70783AB65}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E9E50FB-934C-4D12-84DB-CCF62BE76486}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E9E50FB-934C-4D12-84DB-CCF62BE76486}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E9E50FB-934C-4D12-84DB-CCF62BE76486}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E9E50FB-934C-4D12-84DB-CCF62BE76486}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33196CCB-629C-4430-A4C2-12365E0473E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33196CCB-629C-4430-A4C2-12365E0473E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33196CCB-629C-4430-A4C2-12365E0473E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33196CCB-629C-4430-A4C2-12365E0473E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3EDAF41-905A-4658-B3BF-D8C59FD79935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB062685-05C7-4210-8DC6-70870FCB67DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4431F72-A954-4359-8FB1-50E70783AB65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6DF0CA7B-4654-40B0-A218-0204CB0E2EAE}
+	EndGlobalSection
+EndGlobal
