@@ -82,16 +82,12 @@ namespace DeliveryApp.BusinessLayer.Services
             {
                 foreach (var driver in drivers)
                 {
-                    var dr = context.Users
-                        .Include(u => u.Packages)
-                        .FirstOrDefault(d => d.Id == driver.Id);
-
-                    if (dr.Packages == null)
+                    if (driver.Packages == null)
                     {
                         continue;
                     }
 
-                    dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+                    driver.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
                     context.Users.Update(driver);
 
                 }

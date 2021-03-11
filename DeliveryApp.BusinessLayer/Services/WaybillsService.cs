@@ -68,12 +68,9 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
-                var fileName = Path.Combine(path, "\\",
-                    driver.Id.ToString(), "_", 
-                    TimeProvider.Now.Year.ToString(),
-                    TimeProvider.Now.Month.ToString(),
-                    TimeProvider.Now.Day.ToString(),
-                    ".json");
+                var fileName = Path.Combine(path,
+                    $"{driver.Id}_{TimeProvider.Now.Year}" +
+                    $"{TimeProvider.Now.Month}{TimeProvider.Now.Day}.json");
 
                 _serializer.Serialize(fileName, driver);
             }

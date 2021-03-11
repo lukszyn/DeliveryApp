@@ -49,23 +49,27 @@ namespace DeliveryApp
         {
             _dbService.EnsureDatabaseCreation();
 
-            new TimersService().SetTimer(_waybillsService.MatchPackages,
-                new DateTime(TimeProvider.Now.Year,
-                TimeProvider.Now.Month,
-                TimeProvider.Now.Day, 0, 0, 0, 0)
-                );
+            //new TimersService().SetTimer(_waybillsService.MatchPackages,
+            //    new DateTime(TimeProvider.Now.Year,
+            //    TimeProvider.Now.Month,
+            //    TimeProvider.Now.Day, 0, 0, 0, 0)
+            //    );
 
-            new TimersService().SetTimer(_deliveriesService.StartDelivering,
-                new DateTime(TimeProvider.Now.Year,
-                TimeProvider.Now.Month,
-                TimeProvider.Now.Day, 8, 0, 0, 0)
-                );
+            _waybillsService.MatchPackages();
+            _deliveriesService.StartDelivering();
+            _deliveriesService.FinishDelivering();
 
-            new TimersService().SetTimer(_deliveriesService.FinishDelivering,
-                new DateTime(TimeProvider.Now.Year,
-                TimeProvider.Now.Month,
-                TimeProvider.Now.Day, 18, 0, 0, 0)
-                );
+            //new TimersService().SetTimer(_deliveriesService.StartDelivering,
+            //    new DateTime(TimeProvider.Now.Year,
+            //    TimeProvider.Now.Month,
+            //    TimeProvider.Now.Day, 8, 0, 0, 0)
+            //    );
+
+            //new TimersService().SetTimer(_deliveriesService.FinishDelivering,
+            //    new DateTime(TimeProvider.Now.Year,
+            //    TimeProvider.Now.Month,
+            //    TimeProvider.Now.Day, 18, 0, 0, 0)
+            //    );
 
             Console.WriteLine("Welcome to the DeliveryApp.\n");
             
