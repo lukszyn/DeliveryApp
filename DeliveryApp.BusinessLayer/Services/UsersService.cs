@@ -45,7 +45,7 @@ namespace DeliveryApp.BusinessLayer.Services
             {
                 return context.Users
                     .Include(u => u.Vehicle)
-                    .Any(user => user.Id == id 
+                    .Any(user => user.Id == id
                               && user.UserType == UserType.Driver
                               && user.Vehicle == null);
             }
@@ -87,29 +87,30 @@ namespace DeliveryApp.BusinessLayer.Services
                     .Include(u => u.Vehicle)
                     .Include(u => u.Address)
                     .Include(u => u.Packages)
+                    .ThenInclude(p => p.ReceiverAddress)
+                    .Include(u => u.Packages)
+                    .ThenInclude(p => p.Sender)
                     .Include(u => u.Position)
                     .Where(u => u.UserType == UserType.Driver)
                     .ToList();
             }
         }
 
-        public bool UpdatePackages(int userId, Package package)
+        public bool UpdatePackages(User user, Package package)
         {
             using (var context = _dbContextFactoryMethod())
             {
-                var courier = context.Users.FirstOrDefault(c => c.Id == userId);
-
-                if (courier == null)
+                if (user == null)
                 {
                     return false;
                 }
 
-                if (courier.Packages == null)
+                if (user.Packages == null)
                 {
-                    courier.Packages = new List<Package>();
+                    user.Packages = new List<Package>();
                 }
 
-                courier.Packages.Add(package);
+                user.Packages.Add(package);
 
                 context.SaveChanges();
 

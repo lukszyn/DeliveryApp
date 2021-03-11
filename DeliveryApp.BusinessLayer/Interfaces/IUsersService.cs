@@ -12,7 +12,7 @@ namespace DeliveryApp.BusinessLayer.Interfaces
         public int GetUserId(string email);
         public ICollection<User> GetAllDrivers();
         public Task AddAsync(User user);
-        public bool UpdatePackages(int userId, Package package);
+        public bool UpdatePackages(User user, Package package);
         public Task<Position> GetUserPosition(Address address);
         List<Package> GetDriverPackages(int driverId);
         Task<User> ValidateCourier(string email, string password);

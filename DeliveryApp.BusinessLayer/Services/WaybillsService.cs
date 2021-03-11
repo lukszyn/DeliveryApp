@@ -50,7 +50,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
                     closestDriver.Packages.Add(package);
 
-                    _usersService.UpdatePackages(closestDriver.Id, package);
+                    _usersService.UpdatePackages(closestDriver, package);
                 }
             }
 
@@ -59,7 +59,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         private void GenerateWaybills(List<User> drivers)
         {
-            var path = @"shipping_lists";
+            var path = Path.GetFullPath($@"{Directory.GetCurrentDirectory()}\..\..\..\..\shipping_lists");
 
             if (!Directory.Exists(path))
             {
@@ -154,12 +154,13 @@ namespace DeliveryApp.BusinessLayer.Services
 
         public async Task<User> GetLatestWaybillAsync(int id)
         {
-            var path = new DirectoryInfo(@"shipping_lists");
-            var file = path.GetFiles($"{id}*")
-                .OrderByDescending(f => f.LastWriteTime)
-                .First();
+            var path = Path.GetFullPath($@"{Directory.GetCurrentDirectory()}\..\..\..\..\shipping_lists");
+            var file = Directory.GetFiles(path, $"{id}*");
+            var files = file
+                .OrderByDescending(f => File.GetLastWriteTime(f))
+                .FirstOrDefault();
 
-            return await _serializer.DeserializeAsync(file.FullName);
+            return await _serializer.DeserializeAsync(files);
         }
     }
 }

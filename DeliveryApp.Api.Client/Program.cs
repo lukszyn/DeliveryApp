@@ -24,7 +24,7 @@ namespace DeliveryApp.Api.Client
 
             do
             {
-                var userChoice = GetIntFromUser("Choose option number: ");
+                var userChoice = GetIntFromUser("Choose option number");
 
                 switch (userChoice)
                 {
@@ -38,7 +38,7 @@ namespace DeliveryApp.Api.Client
                         Console.WriteLine("Unknown option");
                         break;
                 }
-            } while (_loggedUser != null);
+            } while (_loggedUser == null);
 
             Console.WriteLine("Choose option:");
             Console.WriteLine("1. Show latest waybills");
@@ -46,7 +46,7 @@ namespace DeliveryApp.Api.Client
 
             while (true)
             {
-                var userChoice = GetIntFromUser("Choose option number: ");
+                var userChoice = GetIntFromUser("Choose option number");
 
                 switch (userChoice)
                 {
@@ -66,6 +66,8 @@ namespace DeliveryApp.Api.Client
         private void SignIn()
         {
             var credentials = GetCredentials();
+
+            CheckCredentials(credentials);
 
             if (_loggedUser == null)
             {
@@ -146,12 +148,15 @@ namespace DeliveryApp.Api.Client
 
         private void PrintPackage(Package package)
         {
-            var textToPrint = $"Package {package.Id}\n" +
-                $"Package number: {package.Number}\n" +
-                $"Receiver: {package.Receiver}\n" +
-                $" Receiver address: {package.ReceiverAddress.Street} {package.ReceiverAddress.Number}\n" +
-                $"{package.ReceiverAddress.ZipCode} {package.ReceiverAddress.City}\n" +
-                $"Sender: {package.Sender.FirstName} {package.Sender.LastName}";
+            Console.BackgroundColor = ConsoleColor.Green;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine($"\n\nPackage no. {package.Number}");
+            Console.ResetColor();
+
+            var textToPrint = $"\nReceiver:\n\t{package.Receiver}" +
+                $"\nReceiver address:\n\t{package.ReceiverAddress.Street} {package.ReceiverAddress.Number}" +
+                $"\n\t{package.ReceiverAddress.ZipCode} {package.ReceiverAddress.City}" +
+                $"\nSender:\n\t{package.Sender.FirstName} {package.Sender.LastName}";
 
             Console.WriteLine(textToPrint);
         }

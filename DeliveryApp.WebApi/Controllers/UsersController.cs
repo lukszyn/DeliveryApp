@@ -67,7 +67,6 @@ namespace DeliveryApp.WebApi.Controllers
         Method: GET
             URI: http://localhost:10500/api/users/{id}
         */
-
         [Route("{id}")]
         [HttpGet]
         public async Task<User> GetUserPackages(int id)

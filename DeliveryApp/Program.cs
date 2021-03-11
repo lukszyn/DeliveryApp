@@ -182,9 +182,18 @@ namespace DeliveryApp
                 return;
             }
 
+            var password = _ioHelper.GetTextFromUser("Provide a password (minimum 6 characters)");
+
+            if (!_ioHelper.ValidatePassword(password))
+            {
+                Console.WriteLine("Password must have at least 6 characters!\n");
+                return;
+            }
+
             user = new User()
             {
                 Email = email,
+                Password = password,
                 FirstName = _ioHelper.GetTextFromUser("Enter your first name"),
                 LastName = _ioHelper.GetTextFromUser("Enter your last name"),
                 Address = new Address()
