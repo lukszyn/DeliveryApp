@@ -1,6 +1,7 @@
 ﻿using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DeliveryApp.WebApi.Controllers
@@ -17,7 +18,7 @@ namespace DeliveryApp.WebApi.Controllers
 
         /*
         Method: POST
-        URI: http://localhost:10500/api/users
+        URI: http://localhost:10500/api/packages
         Body:
         {
             "id": 0,
@@ -36,9 +37,18 @@ namespace DeliveryApp.WebApi.Controllers
         */
 
         [HttpPost]
-        public async Task PostUser([FromBody] Package package)
+        public async Task PostPackage([FromBody] Package package)
         {
             await _packagesService.AddAsync(package);
+        }
+
+        [HttpPut]
+        public async Task UpdatePackageStatus([FromBody] List<Package> packages)
+        {
+            foreach (var package in packages)
+            {
+                _packagesService.UpdateStatus(package.Id, package.Courier.Id, Status.OnTheWay);
+            }
         }
     }
 }

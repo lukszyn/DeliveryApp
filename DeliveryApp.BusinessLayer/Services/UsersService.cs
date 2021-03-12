@@ -147,5 +147,17 @@ namespace DeliveryApp.BusinessLayer.Services
                 return driver.Packages.ToList();
             }
         }
+
+        public async Task SetDeliveryMode(int id, bool isManual)
+        {
+            using (var context = _dbContextFactoryMethod())
+            {
+                var driver = await context.Users.AsQueryable().FirstOrDefaultAsync(u => u.Id == id);
+
+                driver.ManualDelivery = isManual;
+
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

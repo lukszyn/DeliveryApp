@@ -52,6 +52,8 @@ namespace DeliveryApp.Api.Client
                 {
                     case 1:
                         GetLatestWaybills(_loggedUser.Id);
+                        SwitchToManualDelivery(_loggedUser.Id);
+                        UpdatePackages();
                         break;
                     case 2:
                         Environment.Exit(0);
@@ -159,6 +161,55 @@ namespace DeliveryApp.Api.Client
                 $"\nSender:\n\t{package.Sender.FirstName} {package.Sender.LastName}";
 
             Console.WriteLine(textToPrint);
+        }
+
+        private void SwitchToManualDelivery(int id)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var content = new StringContent(JsonConvert.SerializeObject(true), Encoding.UTF8, "application/json");
+                var response = httpClient.PutAsync(@$"http://localhost:10500/api/users/manual/?id={id}", content).Result;
+                var responseText = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"Your packages are now delivered manually.");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Something went wrong. Your packages are delivered automatically.");
+                    Console.ResetColor();
+                }
+            }
+        }
+
+        private void UpdatePackages()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var packages = _loggedUser.Packages;
+                var content = new StringContent(JsonConvert.SerializeObject(packages), Encoding.UTF8, "application/json");
+                var response = httpClient.PutAsync(@$"http://localhost:10500/api/packages/update", content).Result;
+                var responseText = response.Content.ReadAsStringAsync().Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.WriteLine($"All your packages are on the way.");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Something went wrong...");
+                    Console.ResetColor();
+                }
+            }
         }
     }
 }

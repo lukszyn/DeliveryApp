@@ -34,5 +34,6 @@ namespace DeliveryApp.DataLayer.Models
         [InverseProperty("Courier")]
         public ICollection<Package> Packages { get; set; }
         public Vehicle Vehicle { get; set; }
+        public bool ManualDelivery { get; set; } = false;
     }
 }

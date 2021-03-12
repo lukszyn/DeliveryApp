@@ -73,5 +73,12 @@ namespace DeliveryApp.WebApi.Controllers
         {
             return await _waybillsService.GetLatestWaybillAsync(id);
         }
+
+        [Route("manual")]
+        [HttpPut]
+        public async Task SwitchToManualDelivery([FromQuery] int id, [FromBody] bool isManual)
+        {
+            await _usersService.SetDeliveryMode(id, isManual);
+        }
     }
 }

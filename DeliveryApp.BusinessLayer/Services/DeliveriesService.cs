@@ -41,6 +41,11 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
+                if (driver.ManualDelivery)
+                {
+                    continue;
+                }
+
                 var packages = _usersService.GetDriverPackages(driver.Id);
 
                 if (packages == null) return;
