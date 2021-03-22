@@ -59,15 +59,16 @@ namespace DeliveryApp.BusinessLayer.Services
                     {
                         _vehiclesService.UpdateLoad(driver.Vehicle.Id, 0);
 
-                        //new ConfirmationRequestsService().SendRequest(new PackageData() {
-                        //    Id = package.Number,
-                        //    Receiver = package.Receiver,
-                        //    Street = package.ReceiverAddress.Street,
-                        //    Number = package.ReceiverAddress.Number,
-                        //    ZipCode = package.ReceiverAddress.ZipCode,
-                        //    City = package.ReceiverAddress.City,
-                        //    Email = package.Sender.Email,
-                        //});
+                        new ConfirmationRequestsService().SendRequest(new PackageData()
+                        {
+                            Id = package.Number,
+                            Receiver = package.Receiver,
+                            Street = package.ReceiverAddress.Street,
+                            Number = package.ReceiverAddress.Number,
+                            ZipCode = package.ReceiverAddress.ZipCode,
+                            City = package.ReceiverAddress.City,
+                            Email = package.Sender.Email,
+                        });
                     }
                 }
             }

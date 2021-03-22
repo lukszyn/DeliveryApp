@@ -43,12 +43,20 @@ namespace DeliveryApp.WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task UpdatePackageStatus([FromBody] List<Package> packages)
+        [Route("update")]
+        public async Task UpdatePackagesStatus([FromBody] List<Package> packages)
         {
             foreach (var package in packages)
             {
-                _packagesService.UpdateStatus(package.Id, package.Courier.Id, Status.OnTheWay);
+                _packagesService.UpdatePackageStatus(package.Id, Status.OnTheWay);
             }
+        }
+
+        [HttpPut]
+        [Route("deliver")]
+        public async Task DeliverPackage([FromBody] Package package)
+        {
+            _packagesService.UpdatePackageStatus(package.Id, Status.Delivered);
         }
     }
 }

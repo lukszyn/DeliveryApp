@@ -49,7 +49,6 @@ namespace DeliveryApp.BusinessLayer.Services
 
                 return true;
             }
-            
         }
     }
 }

@@ -25,7 +25,10 @@ namespace DeliveryApp.BusinessLayer.Services
         {
             using (var context = _dbContextFactoryMethod())
             {
-                return await context.Users.AsQueryable().FirstOrDefaultAsync(user => user.Email == email
+                return  await context.Users
+                    .Include(u => u.Position)
+                    .Include(u => u.Vehicle)
+                    .FirstOrDefaultAsync(user => user.Email == email
                                          && user.Password == password
                                          && user.UserType == UserType.Driver);
             }
@@ -88,6 +91,8 @@ namespace DeliveryApp.BusinessLayer.Services
                     .Include(u => u.Address)
                     .Include(u => u.Packages)
                     .ThenInclude(p => p.ReceiverAddress)
+                    .Include(u => u.Packages)
+                    .ThenInclude(p => p.Courier)
                     .Include(u => u.Packages)
                     .ThenInclude(p => p.Sender)
                     .Include(u => u.Position)

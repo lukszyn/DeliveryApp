@@ -94,5 +94,29 @@ namespace DeliveryApp.BusinessLayer.Services
                 context.SaveChanges();
             }
         }
+
+        public bool UpdatePackageStatus(int id, Status status)
+        {
+            using (var context = _dbContextFactoryMethod())
+            {
+                var package = context.Packages.FirstOrDefault(p => p.Id == id);
+
+                if (package == null)
+                {
+                    return false;
+                }
+
+                package.Status = status;
+
+                if (status == Status.Delivered)
+                {
+                    package.DeliveryDate = TimeProvider.Now;
+                }
+
+                context.SaveChanges();
+
+                return true;
+            }
+        }
     }
 }

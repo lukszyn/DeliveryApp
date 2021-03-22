@@ -60,6 +60,9 @@ namespace DeliveryApp.DataLayer.Migrations
                     b.Property<int?>("CourierId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("Number")
                         .HasColumnType("uniqueidentifier");
 
