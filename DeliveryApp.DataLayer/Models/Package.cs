@@ -33,6 +33,7 @@ namespace DeliveryApp.DataLayer.Models
         public Address ReceiverAddress { get; set; }
         public Position ReceiverPosition { get; set; }
         public DateTime RegisterDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
         public User Courier { get; set; }
         public Size Size { get; set; }
         public Status Status { get; set; }

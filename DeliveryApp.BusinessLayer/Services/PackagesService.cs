@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -11,18 +12,25 @@ namespace DeliveryApp.BusinessLayer.Services
     public class PackagesService : IPackagesService
     {
         private Func<IDeliveryAppDbContext> _dbContextFactoryMethod;
+        private readonly IUsersService _usersService;
 
-        public PackagesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod)
+        public PackagesService(Func<IDeliveryAppDbContext> dbContextFactoryMethod,
+            IUsersService usersService)
         {
             _dbContextFactoryMethod = dbContextFactoryMethod;
+            _usersService = usersService;
         }
 
-        public void Add(Package package)
+        public async Task AddAsync(Package package)
         {
             using (var context = _dbContextFactoryMethod())
             {
+                package.Number = Guid.NewGuid();
+                package.ReceiverPosition = await _usersService.GetUserPosition(package.ReceiverAddress);
+                package.RegisterDate = TimeProvider.Now;
+                
                 context.Packages.Add(package);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -74,19 +82,40 @@ namespace DeliveryApp.BusinessLayer.Services
             {
                 foreach (var driver in drivers)
                 {
-                    var dr = context.Users
-                        .Include(u => u.Packages)
-                        .FirstOrDefault(d => d.Id == driver.Id);
-
-                    if (dr.Packages == null)
+                    if (driver.Packages == null)
                     {
                         continue;
                     }
 
-                    dr.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+                    driver.Packages.ToList().RemoveAll(p => p.Status == Status.Delivered);
+                    context.Users.Update(driver);
 
                 }
                 context.SaveChanges();
+            }
+        }
+
+        public bool UpdatePackageStatus(int id, Status status)
+        {
+            using (var context = _dbContextFactoryMethod())
+            {
+                var package = context.Packages.FirstOrDefault(p => p.Id == id);
+
+                if (package == null)
+                {
+                    return false;
+                }
+
+                package.Status = status;
+
+                if (status == Status.Delivered)
+                {
+                    package.DeliveryDate = TimeProvider.Now;
+                }
+
+                context.SaveChanges();
+
+                return true;
             }
         }
     }

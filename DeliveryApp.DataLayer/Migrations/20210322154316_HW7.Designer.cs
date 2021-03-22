@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DeliveryApp.DataLayer.Migrations
 {
     [DbContext(typeof(DeliveryAppDbContext))]
-    [Migration("20210214232201_TablesUpdate")]
-    partial class TablesUpdate
+    [Migration("20210322154316_HW7")]
+    partial class HW7
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,6 +61,9 @@ namespace DeliveryApp.DataLayer.Migrations
 
                     b.Property<int?>("CourierId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("Number")
                         .HasColumnType("uniqueidentifier");
@@ -131,6 +134,12 @@ namespace DeliveryApp.DataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ManualDelivery")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PositionId")

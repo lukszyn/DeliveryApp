@@ -60,6 +60,9 @@ namespace DeliveryApp.DataLayer.Migrations
                     b.Property<int?>("CourierId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("Number")
                         .HasColumnType("uniqueidentifier");
 
@@ -129,6 +132,12 @@ namespace DeliveryApp.DataLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ManualDelivery")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PositionId")

@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DeliveryApp.DataLayer.Migrations
 {
-    public partial class TablesUpdate : Migration
+    public partial class HW7 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +17,20 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Vehicles",
                 type: "int",
                 nullable: false,
-                defaultValue: 70);
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "ManualDelivery",
+                table: "Users",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Password",
+                table: "Users",
+                type: "nvarchar(max)",
+                nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "PositionId",
@@ -29,6 +43,13 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Packages",
                 type: "int",
                 nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DeliveryDate",
+                table: "Packages",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.AddColumn<int>(
                 name: "ReceiverPositionId",
@@ -124,11 +145,23 @@ namespace DeliveryApp.DataLayer.Migrations
                 table: "Vehicles");
 
             migrationBuilder.DropColumn(
+                name: "ManualDelivery",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "Password",
+                table: "Users");
+
+            migrationBuilder.DropColumn(
                 name: "PositionId",
                 table: "Users");
 
             migrationBuilder.DropColumn(
                 name: "CourierId",
+                table: "Packages");
+
+            migrationBuilder.DropColumn(
+                name: "DeliveryDate",
                 table: "Packages");
 
             migrationBuilder.DropColumn(

@@ -41,6 +41,11 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
+                if (driver.ManualDelivery)
+                {
+                    continue;
+                }
+
                 var packages = _usersService.GetDriverPackages(driver.Id);
 
                 if (packages == null) return;
@@ -54,7 +59,8 @@ namespace DeliveryApp.BusinessLayer.Services
                     {
                         _vehiclesService.UpdateLoad(driver.Vehicle.Id, 0);
 
-                        new ConfirmationRequestsService().SendRequest(new PackageData() {
+                        new ConfirmationRequestsService().SendRequest(new PackageData()
+                        {
                             Id = package.Number,
                             Receiver = package.Receiver,
                             Street = package.ReceiverAddress.Street,

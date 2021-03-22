@@ -25,6 +25,7 @@ namespace DeliveryApp.DataLayer.Models
 
         [EmailAddress]
         public string Email { get; set; }
+        public string Password { get; set; }
         public Address Address { get; set;}
         public Position Position { get; set; }
         public UserType UserType { get; set; }
@@ -33,5 +34,6 @@ namespace DeliveryApp.DataLayer.Models
         [InverseProperty("Courier")]
         public ICollection<Package> Packages { get; set; }
         public Vehicle Vehicle { get; set; }
+        public bool ManualDelivery { get; set; } = false;
     }
 }

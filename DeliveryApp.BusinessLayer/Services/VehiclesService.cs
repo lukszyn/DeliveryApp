@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using DeliveryApp.BusinessLayer.Interfaces;
 using DeliveryApp.DataLayer;
 using DeliveryApp.DataLayer.Models;
@@ -23,12 +24,12 @@ namespace DeliveryApp.BusinessLayer.Services
             }
         }
 
-        public void Add(Vehicle vehicle)
+        public async Task AddAsync(Vehicle vehicle)
         {
             using (var context = _dbContextFactoryMethod())
             {
                 context.Vehicles.Add(vehicle);
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
@@ -48,7 +49,6 @@ namespace DeliveryApp.BusinessLayer.Services
 
                 return true;
             }
-            
         }
     }
 }

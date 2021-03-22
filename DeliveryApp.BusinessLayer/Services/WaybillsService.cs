@@ -5,6 +5,7 @@ using GeoCoordinatePortable;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DeliveryApp.BusinessLayer.Services
 {
@@ -49,7 +50,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
                     closestDriver.Packages.Add(package);
 
-                    _usersService.UpdatePackages(closestDriver.Id, package);
+                    _usersService.UpdatePackages(closestDriver, package);
                 }
             }
 
@@ -58,7 +59,7 @@ namespace DeliveryApp.BusinessLayer.Services
 
         private void GenerateWaybills(List<User> drivers)
         {
-            var path = @"shipping_lists";
+            var path = Path.GetFullPath($@"{Directory.GetCurrentDirectory()}\..\..\..\..\shipping_lists");
 
             if (!Directory.Exists(path))
             {
@@ -67,7 +68,10 @@ namespace DeliveryApp.BusinessLayer.Services
 
             foreach (var driver in drivers)
             {
-                var fileName = Path.Combine(path, "\\", driver.Id.ToString(), "-", TimeProvider.Now.ToShortDateString(), ".json");
+                var fileName = Path.Combine(path,
+                    $"{driver.Id}_{TimeProvider.Now.Year}" +
+                    $"{TimeProvider.Now.Month}{TimeProvider.Now.Day}.json");
+
                 _serializer.Serialize(fileName, driver);
             }
         }
@@ -108,14 +112,14 @@ namespace DeliveryApp.BusinessLayer.Services
             return closestDriver;
         }
 
-        public GeoCoordinate GetLocation(Address address)
+        public async Task<GeoCoordinate> GetLocation(Address address)
         {
             var country = "Poland";
             var city = address.City;
             var street = address.Street;
             var building = address.Number.ToString();
 
-            var data = _geoDataService.GetCoordinatesForAddress(country, city, street, building);
+            var data = await _geoDataService.GetCoordinatesForAddress(country, city, street, building);
 
             return new GeoCoordinate(data.Lat, data.Lon);
         }
@@ -147,7 +151,16 @@ namespace DeliveryApp.BusinessLayer.Services
 
             return dist / avgSpeed;
         }
+
+        public async Task<User> GetLatestWaybillAsync(int id)
+        {
+            var path = Path.GetFullPath($@"{Directory.GetCurrentDirectory()}\..\..\..\..\shipping_lists");
+            var file = Directory.GetFiles(path, $"{id}*");
+            var files = file
+                .OrderByDescending(f => File.GetLastWriteTime(f))
+                .FirstOrDefault();
+
+            return await _serializer.DeserializeAsync(files);
+        }
     }
-
-
 }

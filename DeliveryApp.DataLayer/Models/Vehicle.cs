@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text.Json.Serialization;
 
 namespace DeliveryApp.DataLayer.Models
 {
@@ -13,7 +11,9 @@ namespace DeliveryApp.DataLayer.Models
         public uint Capacity { get; set; }
         public uint Load { get; set; }
         public int AverageSpeed { get; set; }
+        [JsonIgnore]
         public int UserId { get; set; }
+        [JsonIgnore]
         public User User { get; set; }
     }
 }
